@@ -1,9 +1,6 @@
 import React from "react";
 import { BsLightbulb } from "react-icons/bs";
-import { FaQuestionCircle } from "react-icons/fa";
 import { FaArrowRightLong } from "react-icons/fa6";
-import { GiThink } from "react-icons/gi";
-import { MdHelpOutline } from "react-icons/md";
 import { useLocation } from "react-router-dom";
 
 const BmrSuccess = () => {
