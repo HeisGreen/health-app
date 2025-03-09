@@ -24,6 +24,7 @@ const Bmr = () => {
       navigate("/bmrSuccess", { state: { bmrResult: response.data } });
     } catch (error) {
       console.error("Error calculating BMR : ", error);
+      alert("Error calculating BMR!");
       setError(
         "Failed to calculate BMR, please check your inputs and try again later."
       );
