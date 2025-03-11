@@ -14,7 +14,7 @@ import { Profile } from './components/Profile.jsx';
 import Settings  from './components/Settings.jsx';
 import Bmi from './components/Bmi.tsx';
 import BmiUw from './success/BmiUw.tsx';
-import BmrSuccess from './success/BmiSuccess.tsx';
+import BmrSuccess from './success/BmrSuccess.tsx';
 
 
 function App() {

@@ -156,7 +156,7 @@ const Signup = () => {
           </form>
           <button
             form="signupForm"
-            className={`h-[38px] w-44 mt-20 sm:mt-80 bg-white text-teal-800 font-bold rounded hover:bg-orange-300 hover:text-white cursor-pointer ${
+            className={`h-[38px] w-44 mt-85 bg-white text-teal-800 font-bold rounded hover:bg-orange-300 hover:text-white cursor-pointer ${
               isLoading ? "opacity-50 cursor-not-allowed" : ""
             }`}
             type="submit"

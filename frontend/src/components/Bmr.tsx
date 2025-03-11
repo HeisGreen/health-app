@@ -47,7 +47,8 @@ const Bmr = () => {
           <p className="text-xl">
             Basal metabolism represents the minimum amount of energy expended in
             a fasting state (12 hours or more) to keep a resting, awake body
-            alive in a warm, quiet environment.
+            alive in a warm, quiet environment. Basically, the amoutnt of food
+            you need to take in to stay alive.
           </p>
         </div>
         <div className="flex space-x-3 h-[400px] w-[500px]">
