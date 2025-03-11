@@ -25,6 +25,7 @@ public class BmiServiceImpl implements BmiService{
        double bmi = (weight / (height * height));
 
         DecimalFormat df = new DecimalFormat("#.##");
+        System.out.printf("jj");
         return Double.parseDouble(df.format(bmi));
     }
 }
