@@ -168,7 +168,7 @@ const Signup = () => {
           </p>
           <h3 className="w-full py-5 border-t-orange-400 border-t-[0.4px] text-sm text-center font-bold">
             Already have an account?{" "}
-            <Link to="/login" className="text-blue-500 underline">
+            <Link to="/login" className="text-orange-300 underline">
               Login
             </Link>
           </h3>
