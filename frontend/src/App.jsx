@@ -5,7 +5,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Navbar from './components/Navbar.jsx';
 import Dashboard from './components/Dashboard.jsx';
 import Bmr from './components/Bmr.tsx'
-import Eer from './components/Eer.jsx'
+import Eer from './components/Eer.tsx'
 import Tips from './components/Tips.jsx'
 import Tracker from './components/Tracker.jsx'
 import Planner from './components/Planner.jsx'
@@ -15,6 +15,7 @@ import Settings  from './components/Settings.jsx';
 import Bmi from './components/Bmi.tsx';
 import BmiUw from './success/BmiUw.tsx';
 import BmrSuccess from './success/BmrSuccess.tsx';
+import EerSuccess from './success/EerSuccess.tsx';
 
 
 function App() {
@@ -39,6 +40,7 @@ function App() {
         < Route path='/settings' element={<Settings/>}/>
         < Route path='/bmiUw' element={<BmiUw/>}/>
         < Route path='/bmrSuccess' element={<BmrSuccess/>}/>
+        <Route path='/eerSuccess' element={<EerSuccess/>}/>
         </Routes>
         </div>
   </Router>

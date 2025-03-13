@@ -7,6 +7,18 @@ const BmiUw = () => {
   const location = useLocation();
   const { bmiResult } = location.state || { bmiResult: null };
 
+  const getStatus = (bmi: number): JSX.Element => {
+    if (bmi < 18.5) {
+      return <p className="text-red-500 font-bold">Status: Bad</p>;
+    } else if (bmi >= 18.5 && bmi < 24.9) {
+      return <p className="text-green-500 font-bold">Status: Good</p>;
+    } else if (bmi >= 25 && bmi < 29.9) {
+      return <p className="text-yellow-500 font-bold">Status: Caution</p>;
+    } else {
+      return <p className="text-red-500 font-bold">Status: Alarming</p>;
+    }
+  };
+
   // Function to get advice based on BMI
   const getAdvice = (bmi: number): string => {
     if (bmi < 18.5) {
@@ -27,7 +39,9 @@ const BmiUw = () => {
         "flex flex-col gap-4 w-full items-center justify-center h-screen text-center"
       }
     >
-      <p className={"text-[#4F46E5] font-bold"}>Success</p>
+      <p className={"text-[#4F46E5] text-9xl font-bold neon-glow"}>
+        {getStatus(bmiResult)}
+      </p>
       <h1
         className={"text-3xl sm:text-5xl font-bold italic text-teal-800 flex"}
       >
