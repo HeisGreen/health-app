@@ -27,7 +27,8 @@ public class WebSecurity {
                         authorize
                                 .requestMatchers(HttpMethod.POST, "/api/user/signup").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/api/bmi/calculate").permitAll()
-                                .requestMatchers(HttpMethod.POST, "/api/bmr/calculate").permitAll()// Public POST endpoint
+                                .requestMatchers(HttpMethod.POST, "/api/bmr/calculate").permitAll()
+                                .requestMatchers(HttpMethod.POST, "/api/eer/calculate").permitAll()// Public POST endpoint
                                 .anyRequest().authenticated()) // All other endpoints require authentication
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)); // Stateless session
