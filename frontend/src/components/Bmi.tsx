@@ -16,14 +16,22 @@ const Bmi = () => {
 
   const handleCalculate = async () => {
     try {
+      const token = localStorage.getItem("token"); // Get the token from local storage
+      if (!token) {
+        throw new Error("No token found. Please log in.");
+      }
       const response = await axios.post(
         "http://localhost:8080/api/bmi/calculate",
         {
           weight: parseFloat(weight),
           height: parseFloat(height),
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
       );
-
       navigate("/bmiUw", { state: { bmiResult: response.data } });
       setError(null);
     } catch (error) {

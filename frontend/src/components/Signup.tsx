@@ -33,14 +33,11 @@ const Signup = () => {
     setIsLoading(true); // Start loading
     try {
       const response = await registerUser(formData); // Call the API service
+      localStorage.setItem("firstName", formData.firstName);
+      localStorage.setItem("lastName", formData.lastName);
       console.log("Registration successful:", response);
       alert("Registration successful!");
-      navigate("/dashboard", {
-        state: {
-          firstName: formData.firstName,
-          lastName: formData.lastName,
-        },
-      });
+      navigate("/dashboard");
     } catch (error) {
       console.error("Registration failed:", error);
       alert("Registration failed. Please try again.");

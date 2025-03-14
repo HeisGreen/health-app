@@ -14,13 +14,21 @@ const Bmr = () => {
 
   const handleCalculate = async () => {
     try {
+      const token = localStorage.getItem("token"); // Get the token from local storage
+      if (!token) {
+        throw new Error("No token found. Please log in.");
+      }
+
       const response = await axios.post(
         "http://localhost:8080/api/bmr/calculate",
+        { weight: parseFloat(weight), gender: gender },
         {
-          weight: parseFloat(weight),
-          gender: gender,
+          headers: {
+            Authorization: `Bearer ${token}`, // Include the token in the request headers
+          },
         }
       );
+
       navigate("/bmrSuccess", { state: { bmrResult: response.data } });
     } catch (error) {
       console.error("Error calculating BMR : ", error);

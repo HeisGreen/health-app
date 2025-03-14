@@ -6,7 +6,7 @@ const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <header className="bg-gradient-to-b sticky top-0 z-20 mx-auto flex w-full h-[80px] md:h-[100px] items-center justify-between border-b border-gray-400 p-4">
+    <header className="bg-gradient-to-b  top-0 z-20 mx-auto flex w-full h-[80px] md:h-[100px] items-center justify-between border-b border-gray-400 p-4">
       {/* Logo Section */}
       <Link to="/dashboard" className="flex items-center space-x-2">
         <img src="healthcare.svg" alt="Logo" className="w-12 h-12 md:w-16 md:h-16" />

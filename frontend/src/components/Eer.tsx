@@ -72,6 +72,10 @@ const Eer = () => {
 
   const handleCalculate = async () => {
     try {
+      const token = localStorage.getItem("token"); // Get the token from local storage
+      if (!token) {
+        throw new Error("No token found. Please log in.");
+      }
       const response = await axios.post(
         "http://localhost:8080/api/eer/calculate",
         {
@@ -80,6 +84,11 @@ const Eer = () => {
           gender: gender,
           age: parseInt(age),
           activityLevel: parseFloat(activityLevel),
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // Include the token in the request headers
+          },
         }
       );
       navigate("/eerSuccess", { state: { eerResult: response.data } });
