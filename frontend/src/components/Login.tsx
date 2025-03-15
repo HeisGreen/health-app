@@ -3,7 +3,13 @@ import { motion } from "framer-motion";
 import React, { useState } from "react";
 import axios from "axios";
 
-const Login = () => {
+interface LoginProps {
+  setIsLoggedIn: (value: boolean) => void;
+  setFirstName: (value: string) => void;
+  setLastName: (value: string) => void;
+}
+
+const Login = ({ setIsLoggedIn, setFirstName, setLastName }: LoginProps) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
@@ -36,7 +42,11 @@ const Login = () => {
       localStorage.setItem("firstName", firstName); // Store first name
       localStorage.setItem("lastName", lastName); // Store last name
 
-      console.log("User details fetched:", { firstName, lastName });
+      // Update state to trigger re-render
+      setIsLoggedIn(true);
+      setFirstName(firstName);
+      setLastName(lastName);
+
       navigate("/dashboard"); // Redirect to dashboard after login
     } catch (err) {
       alert("Invalid email or password");

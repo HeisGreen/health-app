@@ -57,8 +57,14 @@ public class UserServiceImpl implements UserService {
                 .build();
 
         User savedUser = userRepository.save(newUser);
+
+        Authentication authentication = null;
+        authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(userRequest.getEmail(), userRequest.getPassword())
+        );
+
         return UserResponse.builder()
-                .responseCode(AccountUtils.ACCOUNT_CREATION_CODE)
+                .responseCode(jwtTokenProvider.generateToken(authentication))
                 .responseMessage(AccountUtils.ACCOUNT_CREATION_MESSAGE)
                 .build();
     }

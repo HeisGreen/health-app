@@ -2,7 +2,13 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { registerUser } from "../services/authServices";
 
-const Signup = () => {
+interface SignupProps {
+  setIsLoggedIn: (value: boolean) => void;
+  setFirstName: (value: string) => void;
+  setLastName: (value: string) => void;
+}
+
+const Signup = ({ setIsLoggedIn, setFirstName, setLastName }: SignupProps) => {
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -33,10 +39,18 @@ const Signup = () => {
     setIsLoading(true); // Start loading
     try {
       const response = await registerUser(formData); // Call the API service
+      const token = String(response.responseCode);
+      localStorage.setItem("token", token); // Store JWT in local storage
       localStorage.setItem("firstName", formData.firstName);
       localStorage.setItem("lastName", formData.lastName);
       console.log("Registration successful:", response);
       alert("Registration successful!");
+
+      // Update state to trigger re-render
+      setIsLoggedIn(true);
+      setFirstName(formData.firstName);
+      setLastName(formData.lastName);
+
       navigate("/dashboard");
     } catch (error) {
       console.error("Registration failed:", error);
