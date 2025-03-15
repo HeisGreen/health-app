@@ -11,6 +11,7 @@ import {
 import { GiBodyBalance, GiHeartBeats, GiMeal } from "react-icons/gi";
 import { MdFastfood, MdSpaceDashboard } from "react-icons/md";
 import LogoutButton from "./LogoutButton";
+import { Link } from "react-router-dom";
 
 const Sidebar = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -82,12 +83,12 @@ const Sidebar = () => {
             </a>
           </li>
           <li className="mb-2">
-            <a
-              href="/eer"
+            <Link
+              to={"/eer"}
               className="flex items-center py-5 hover:bg-orange-400 rounded"
             >
               <GiMeal className="mr-2" /> {!isCollapsed && "EER"}
-            </a>
+            </Link>
           </li>
           <li className="mb-2">
             <a
