@@ -188,11 +188,12 @@ const Signup = ({ setIsLoggedIn, setFirstName, setLastName }: SignupProps) => {
       <div className=" relative mt-20 h-full w-full mr-8  space-y-5 ">
         <video
           className="h-[770px] object-cover rounded-2xl border-4 border-teal-800"
-          src="fitvid.mp4"
+          src="/fitvid.mp4"
           autoPlay
           loop
           muted
         />
+
         <div className=" absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 h-[10px] w-[900px] mb-20 text-white">
           <h3 className="font-bold text-5xl italic text-orange-400">
             Take Charge of Your Health & Wellness!
