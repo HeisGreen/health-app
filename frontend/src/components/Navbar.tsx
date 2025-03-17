@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Navs from "./Navs";
-import { FaUserCircle } from "react-icons/fa";
 import React from "react";
 import ProfileDropdown from "./ProfileDropdown";
 
@@ -24,12 +23,12 @@ const Navbar = ({
       {/* Logo Section */}
       <Link to="/dashboard" className="flex items-center space-x-2">
         <img
-          src="healthcare.svg"
+          src="/healthcare.svg"
           alt="Logo"
           className="w-12 h-12 md:w-16 md:h-16"
         />
         <img
-          src="h-logoo.png"
+          src="/h-logoo.png"
           alt="Text Logo"
           className="w-28 md:w-40 h-auto"
         />
