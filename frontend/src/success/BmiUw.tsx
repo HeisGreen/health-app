@@ -1,7 +1,7 @@
 import React from "react";
 import { FaSadTear } from "react-icons/fa";
 import { FaArrowRightLong } from "react-icons/fa6";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 const BmiUw = () => {
   const location = useLocation();
@@ -52,15 +52,15 @@ const BmiUw = () => {
           {getAdvice(bmiResult)}
         </p>
       </div>
-      <a
-        href="/bmi"
+      <Link
+        to="/bmi"
         className={
           " flex bg-[#4F46E5] items-center italic justify-center gap-2 text-white px-3.5 py-2.5 rounded-md font-semibold"
         }
       >
         {" "}
         Back to Bmi page <FaArrowRightLong />{" "}
-      </a>
+      </Link>
     </div>
   );
 };

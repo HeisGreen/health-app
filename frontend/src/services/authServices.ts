@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axiosInstance from './axiosInstance';
 
 // Define the type for the user registration data
 interface UserRegistrationData {
@@ -15,7 +15,7 @@ interface UserRegistrationData {
 // Function to handle user registration
 export const registerUser = async (userData) => {
     try {
-        const response = await axios.post('http://localhost:8080/api/user/signup', userData);
+        const response = await axiosInstance.post('/user/signup', userData);
         return response.data;
     } catch (error) {
         console.error('Error during registration:', error);

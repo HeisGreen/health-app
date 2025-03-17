@@ -4,6 +4,7 @@ import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
+import axiosInstance from "../services/axiosInstance";
 
 const Bmi = () => {
   const [useImperial, setUseImperial] = useState(false);
@@ -20,8 +21,8 @@ const Bmi = () => {
       if (!token) {
         throw new Error("No token found. Please log in.");
       }
-      const response = await axios.post(
-        "http://localhost:8080/api/bmi/calculate",
+      const response = await axiosInstance.post(
+        "/bmi/calculate",
         {
           weight: parseFloat(weight),
           height: parseFloat(height),

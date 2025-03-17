@@ -18,6 +18,7 @@ import BmrSuccess from "./success/BmrSuccess.tsx";
 import EerSuccess from "./success/EerSuccess.tsx";
 import PrivateRoute from "./components/PrivateRoute.tsx";
 import React, { useEffect, useState } from "react";
+import { jwtDecode } from "jwt-decode"; // Import jwt-decode
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false); // Track login status
@@ -25,16 +26,32 @@ function App() {
   const [lastName, setLastName] = useState(""); // Track last name
   const [loading, setLoading] = useState(true); // Track loading state
 
+  const isTokenValid = (token: string) => {
+    try {
+      const decodedToken = jwtDecode(token) as { exp: number }; // Decode the token
+      const currentTime = Date.now() / 1000; // Convert to seconds
+      return decodedToken.exp > currentTime; // Check if token is expired
+    } catch (err) {
+      return false; // Token is invalid
+    }
+  };
+
   // Initialize state from localStorage on component mount
   useEffect(() => {
     const token = localStorage.getItem("token");
     const storedFirstName = localStorage.getItem("firstName");
     const storedLastName = localStorage.getItem("lastName");
 
-    if (token) {
-      setIsLoggedIn(true); // Set isLoggedIn to true if token exists
+    if (token && isTokenValid(token)) {
+      setIsLoggedIn(true); // Set isLoggedIn to true if token exists and is valid
       setFirstName(storedFirstName || ""); // Set first name
       setLastName(storedLastName || ""); // Set last name
+    } else {
+      // If the token is expired or invalid, clear localStorage and log the user out
+      localStorage.removeItem("token");
+      localStorage.removeItem("firstName");
+      localStorage.removeItem("lastName");
+      setIsLoggedIn(false);
     }
     setLoading(false); // Mark loading as complete
   }, []); // Empty dependency array ensures this runs only once on mount

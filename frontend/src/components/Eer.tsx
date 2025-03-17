@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import Sidebar from "./Sidebar";
 import { motion } from "framer-motion";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import axiosInstance from "../services/axiosInstance";
 
 const Eer = () => {
   const textVariants = {
@@ -76,8 +76,8 @@ const Eer = () => {
       if (!token) {
         throw new Error("No token found. Please log in.");
       }
-      const response = await axios.post(
-        "http://localhost:8080/api/eer/calculate",
+      const response = await axiosInstance.post(
+        "/eer/calculate",
         {
           weight: parseFloat(weight),
           height: parseFloat(height),

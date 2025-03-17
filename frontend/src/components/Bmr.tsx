@@ -4,6 +4,7 @@ import { FaLightbulb } from "react-icons/fa";
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import axiosInstance from "../services/axiosInstance";
 
 const Bmr = () => {
   const [weight, setWeight] = useState<string>("");
@@ -19,8 +20,8 @@ const Bmr = () => {
         throw new Error("No token found. Please log in.");
       }
 
-      const response = await axios.post(
-        "http://localhost:8080/api/bmr/calculate",
+      const response = await axiosInstance.post(
+        "/bmr/calculate",
         { weight: parseFloat(weight), gender: gender },
         {
           headers: {

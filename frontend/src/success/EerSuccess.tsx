@@ -1,7 +1,7 @@
 import React from "react";
 import { BsLightbulb } from "react-icons/bs";
 import { FaArrowRightLong } from "react-icons/fa6";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 const EerResult = () => {
   const location = useLocation();
@@ -339,15 +339,15 @@ const EerResult = () => {
           </p>
         </div>
       </div>
-      <a
-        href="/eer"
+      <Link
+        to="/eer"
         className={
           " flex bg-[#4F46E5] items-center italic justify-center gap-2 text-white px-3.5 py-2.5 rounded-md font-semibold"
         }
       >
         {" "}
         Back to Eer page <FaArrowRightLong />{" "}
-      </a>
+      </Link>
     </div>
   );
 };

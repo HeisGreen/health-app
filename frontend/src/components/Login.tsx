@@ -1,7 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import React, { useState } from "react";
-import axios from "axios";
+import axiosInstance from "../services/axiosInstance";
 
 interface LoginProps {
   setIsLoggedIn: (value: boolean) => void;
@@ -16,18 +16,15 @@ const Login = ({ setIsLoggedIn, setFirstName, setLastName }: LoginProps) => {
 
   const handleLogin = async () => {
     try {
-      const response = await axios.post(
-        "http://localhost:8080/api/user/login",
-        {
-          email,
-          password,
-        }
-      );
+      const response = await axiosInstance.post("/user/login", {
+        email,
+        password,
+      });
       const token = String(response.data.responseMessage);
       localStorage.setItem("token", token); // Store JWT in local storage
 
-      const userDetailsResponse = await axios.get(
-        "http://localhost:8080/api/user/getUsernames",
+      const userDetailsResponse = await axiosInstance.get(
+        "/user/getUsernames",
         {
           params: { email },
           headers: {

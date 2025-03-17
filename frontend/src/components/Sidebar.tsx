@@ -32,55 +32,55 @@ const Sidebar = () => {
         <img src="" alt="" />
         <ul>
           <li className="mb-2">
-            <a
-              href="/dashboard"
+            <Link
+              to="/dashboard"
               className="flex items-center py-5 hover:bg-orange-400 rounded"
             >
               <MdSpaceDashboard className="mr-2" />{" "}
               {!isCollapsed && "Dashboard"}
-            </a>
+            </Link>
           </li>
           <li className="mb-2">
-            <a
-              href="/profile"
+            <Link
+              to="/profile"
               className="flex items-center py-5 hover:bg-orange-400 rounded"
             >
               <FaUser className="mr-2" /> {!isCollapsed && "Profile"}
-            </a>
+            </Link>
           </li>
           <li className="mb-2">
-            <a
-              href="/tracker"
+            <Link
+              to="/tracker"
               className="flex items-center py-5 hover:bg-orange-400 rounded"
             >
               <MdFastfood className="mr-2" />{" "}
               {!isCollapsed && "Calorie Tracker"}
-            </a>
+            </Link>
           </li>
           <li className="mb-2">
-            <a
-              href="/planner"
+            <Link
+              to="/planner"
               className="flex items-center py-5 hover:bg-orange-400 rounded"
             >
               <FaDumbbell className="mr-2" />{" "}
               {!isCollapsed && "Exercise Planner"}
-            </a>
+            </Link>
           </li>
           <li className="mb-2">
-            <a
-              href="/bmi"
+            <Link
+              to="/bmi"
               className="flex items-center py-5 hover:bg-orange-400 rounded"
             >
               <FaWeight className="mr-2" /> {!isCollapsed && "BMI"}
-            </a>
+            </Link>
           </li>
           <li className="mb-2">
-            <a
-              href="/bmr"
+            <Link
+              to="/bmr"
               className="flex items-center py-5 hover:bg-orange-400 rounded"
             >
               <GiBodyBalance className="mr-2" /> {!isCollapsed && "BMR"}
-            </a>
+            </Link>
           </li>
           <li className="mb-2">
             <Link
@@ -91,28 +91,28 @@ const Sidebar = () => {
             </Link>
           </li>
           <li className="mb-2">
-            <a
-              href="/tips"
+            <Link
+              to="/tips"
               className="flex items-center py-5 hover:bg-orange-400 rounded"
             >
               <GiHeartBeats className="mr-2" /> {!isCollapsed && "Health Tips"}
-            </a>
+            </Link>
           </li>
           <li className="mb-2">
-            <a
-              href="/forum"
+            <Link
+              to="/forum"
               className="flex items-center py-5 hover:bg-orange-400 rounded"
             >
               <FaUsers className="mr-2" /> {!isCollapsed && "Community Forum"}
-            </a>
+            </Link>
           </li>
           <li className="mb-2">
-            <a
-              href="/settings"
+            <Link
+              to="/settings"
               className="flex items-center py-5 hover:bg-orange-400 rounded"
             >
               <FaCog className="mr-2" /> {!isCollapsed && "Settings"}
-            </a>
+            </Link>
           </li>
           <li className="mb-2">
             <LogoutButton
