@@ -23,24 +23,28 @@ public class JwtTokenProvider {
     @Value("${app.jwt-expiration}")
     private Long jwtExpirationDate;
 
-    public String generateToken(Authentication authentication){
-        String name = authentication.getName();
+    // Generate JWT token
+    public String generateToken(Authentication authentication) {
+        String username = authentication.getName();
         Date currentDate = new Date();
         Date expiryDate = new Date(currentDate.getTime() + jwtExpirationDate);
 
         return Jwts.builder()
-                .setSubject(name)
-                .setIssuedAt(expiryDate)
-                .signWith(key())
+                .setSubject(username) // Set the subject (username)
+                .setIssuedAt(currentDate) // Set the issued at time (current time)
+                .setExpiration(expiryDate) // Set the expiration time
+                .signWith(key()) // Sign the token with the key
                 .compact();
     }
 
-    public Key key(){
-        byte[] bytes = Decoders.BASE64.decode(jwtSecret);
-        return Keys.hmacShaKeyFor(bytes);
+    // Get the signing key
+    private Key key() {
+        byte[] keyBytes = Decoders.BASE64.decode(jwtSecret);
+        return Keys.hmacShaKeyFor(keyBytes);
     }
 
-    public String getUsername(String token){
+    // Get username from JWT token
+    public String getUsername(String token) {
         Claims claims = Jwts.parser()
                 .setSigningKey(key())
                 .build()
@@ -50,16 +54,26 @@ public class JwtTokenProvider {
         return claims.getSubject();
     }
 
-    public boolean validateToken (String token){
+    // Validate JWT token
+    public boolean validateToken(String token) {
         try {
             Jwts.parser()
                     .setSigningKey(key())
                     .build()
-                    .parse(token);
-
-            return true;
-        } catch (ExpiredJwtException | IllegalArgumentException | SecurityException | MalformedJwtException e) {
-            throw new RuntimeException(e);
+                    .parseClaimsJws(token); // Validate the token
+            return true; // Token is valid
+        } catch (ExpiredJwtException ex) {
+            // Token has expired
+            System.out.println("Token has expired: " + ex.getMessage());
+            return false;
+        } catch (SecurityException | MalformedJwtException ex) {
+            // Invalid token signature or structure
+            System.out.println("Invalid JWT token: " + ex.getMessage());
+            return false;
+        } catch (IllegalArgumentException ex) {
+            // Token is empty or null
+            System.out.println("JWT token is empty or null: " + ex.getMessage());
+            return false;
         }
     }
 }
