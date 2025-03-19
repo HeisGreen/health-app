@@ -1,9 +1,6 @@
 package com.chidoscode.ems.service.impl;
 
-import com.chidoscode.ems.dto.UserDetailsResponse;
-import com.chidoscode.ems.dto.UserLoginRequest;
-import com.chidoscode.ems.dto.UserRequest;
-import com.chidoscode.ems.dto.UserResponse;
+import com.chidoscode.ems.dto.*;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
@@ -13,4 +10,6 @@ public interface UserService {
     UserResponse createAccount(UserRequest userRequest);
     UserResponse login(UserLoginRequest userLoginRequest);
     UserDetailsResponse getUserDetailsByEmail(String email);
+    UserResponse changePassword(String token, ChangePasswordRequest changePasswordRequest);
+    UserResponse deleteAccount(String token);
 }

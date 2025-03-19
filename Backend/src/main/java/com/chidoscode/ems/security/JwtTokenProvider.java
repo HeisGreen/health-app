@@ -37,6 +37,7 @@ public class JwtTokenProvider {
                 .compact();
     }
 
+
     // Get the signing key
     private Key key() {
         byte[] keyBytes = Decoders.BASE64.decode(jwtSecret);
@@ -45,6 +46,9 @@ public class JwtTokenProvider {
 
     // Get username from JWT token
     public String getUsername(String token) {
+
+        token = token.replace("Bearer ", "");
+
         Claims claims = Jwts.parser()
                 .setSigningKey(key())
                 .build()

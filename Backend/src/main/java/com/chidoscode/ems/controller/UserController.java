@@ -1,9 +1,6 @@
 package com.chidoscode.ems.controller;
 
-import com.chidoscode.ems.dto.UserDetailsResponse;
-import com.chidoscode.ems.dto.UserLoginRequest;
-import com.chidoscode.ems.dto.UserRequest;
-import com.chidoscode.ems.dto.UserResponse;
+import com.chidoscode.ems.dto.*;
 import com.chidoscode.ems.service.impl.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -30,4 +27,16 @@ public class UserController {
     public UserDetailsResponse login(@RequestParam String email) {
         return userService.getUserDetailsByEmail(email);
     }
+
+    @PutMapping("/changePassword")
+    public UserResponse changePassword(@RequestHeader("Authorization") String token, @RequestBody ChangePasswordRequest changePasswordRequest){
+        return userService.changePassword(token, changePasswordRequest);
+    }
+
+    @DeleteMapping("/deleteAccount")
+    public UserResponse deleteAccount(@RequestHeader("Authorization") String token){
+        return userService.deleteAccount(token);
+    }
 }
+
+
