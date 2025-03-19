@@ -94,7 +94,7 @@ const Navbar = ({
           ) : (
             // Display Sign Up button in mobile menu if not logged in
             <Link
-              to="/signup"
+              to="/"
               className="bg-orange-500 text-white px-4 py-2 rounded hover:bg-orange-600 mt-4"
             >
               Sign Up

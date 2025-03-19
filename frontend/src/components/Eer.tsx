@@ -71,6 +71,11 @@ const Eer = () => {
   };
 
   const handleCalculate = async () => {
+    if (!height || !weight || !age || !gender || !activityLevel) {
+      alert("Please fill in all fields.");
+      return;
+    }
+
     try {
       const token = localStorage.getItem("token"); // Get the token from local storage
       if (!token) {

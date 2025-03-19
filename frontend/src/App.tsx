@@ -11,7 +11,7 @@ import Tracker from "./components/Tracker.jsx";
 import Planner from "./components/Planner.jsx";
 import Forum from "./components/Forum.jsx";
 import { Profile } from "./components/Profile.jsx";
-import Settings from "./components/Settings.jsx";
+import Settings from "./components/Settings.tsx";
 import Bmi from "./components/Bmi.tsx";
 import BmiUw from "./success/BmiUw.tsx";
 import BmrSuccess from "./success/BmrSuccess.tsx";
@@ -75,7 +75,7 @@ function App() {
     window.location.href = "/login"; // Redirect to login page
   };
   return (
-    <div className=" bg-gradient-to-b from-white to-lime-600">
+    <div className="bg-gradient-to-b from-white to-lime-600">
       <Router>
         <Navbar
           isLoggedIn={isLoggedIn}

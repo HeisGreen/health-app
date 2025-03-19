@@ -15,6 +15,10 @@ const Login = ({ setIsLoggedIn, setFirstName, setLastName }: LoginProps) => {
   const navigate = useNavigate();
 
   const handleLogin = async () => {
+    if (!email || !password) {
+      alert("Please fill in all fields.");
+      return;
+    }
     try {
       const response = await axiosInstance.post("/user/login", {
         email,
