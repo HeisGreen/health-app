@@ -22,7 +22,9 @@ const Dashboard = () => {
         <Sidebar />
       </div>
       <div className="flex-1 border border-b">
-        Welcome to your Dashboard {firstName} {lastName}
+        <p className="text-2xl font-bold text-orange-500 italic">
+          Welcome to your Dashboard {firstName} {lastName}
+        </p>
       </div>
     </div>
   );
