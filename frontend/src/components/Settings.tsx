@@ -64,7 +64,9 @@ const Settings = () => {
     <div className="flex flex-col md:flex-row min-h-screen">
       <Sidebar />
       <div className="flex-1 p-6 md:p-8">
-        <h1 className="text-2xl md:text-3xl font-bold mb-6">Settings</h1>
+        <h1 className="text-2xl md:text-3xl text-teal-800 font-bold mb-6">
+          Settings
+        </h1>
 
         {/* Change Password Section */}
         <div className="bg-green-100 p-6 rounded-xl shadow-md mb-6">
