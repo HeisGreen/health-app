@@ -63,7 +63,7 @@ const Signup = ({ setIsLoggedIn, setFirstName, setLastName }: SignupProps) => {
         loop
         muted
       />
-      <div className="relative bg-teal-900 bg-opacity-90 p-6 rounded-lg shadow-lg w-full max-w-lg">
+      <div className="relative bg-teal-900 bg-opacity-90 border-2 border-white p-6 rounded-lg shadow-lg w-full max-w-lg">
         <h2 className="text-xl sm:text-3xl font-bold text-white text-center mb-4 neon-glow">
           Create an Account with Us
         </h2>
@@ -106,7 +106,7 @@ const Signup = ({ setIsLoggedIn, setFirstName, setLastName }: SignupProps) => {
           />
           <select
             name="gender"
-            className="inputClass"
+            className="inputClass text-white"
             value={formData.gender}
             onChange={handleChange}
             required
@@ -117,7 +117,7 @@ const Signup = ({ setIsLoggedIn, setFirstName, setLastName }: SignupProps) => {
           </select>
           <select
             name="department"
-            className="inputClass"
+            className="inputClass text-white"
             value={formData.department}
             onChange={handleChange}
             required
@@ -148,7 +148,7 @@ const Signup = ({ setIsLoggedIn, setFirstName, setLastName }: SignupProps) => {
           />
           <button
             type="submit"
-            className={`w-full py-2 mt-4 bg-white text-teal-800 font-bold rounded hover:bg-orange-300 hover:text-white ${
+            className={`w-full py-2 mt-4 bg-white text-teal-800 font-bold rounded hover:bg-orange-300 cursor-pointer hover:text-white ${
               isLoading ? "opacity-50 cursor-not-allowed" : ""
             }`}
           >
