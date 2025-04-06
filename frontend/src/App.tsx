@@ -19,6 +19,7 @@ import EerSuccess from "./success/EerSuccess.tsx";
 import PrivateRoute from "./components/PrivateRoute.tsx";
 import React, { useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode"; // Import jwt-decode
+import Footer from "./components/Footer.tsx";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false); // Track login status
@@ -83,6 +84,7 @@ function App() {
           lastName={lastName}
           handleLogout={handleLogout}
         />
+
         <div className="min-h-screen flexitems-center justify-center ">
           <Routes>
             <Route
@@ -123,6 +125,7 @@ function App() {
             </Route>
           </Routes>
         </div>
+        <Footer />
       </Router>
     </div>
   );
