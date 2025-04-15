@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Sidebar from "./Sidebar";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
+import { FaSpinner } from "react-icons/fa";
 import axiosInstance from "../services/axiosInstance";
 
 const Eer = () => {
@@ -61,12 +62,9 @@ const Eer = () => {
     { value: "1.45", label: "Very active (hard exercise 6-7 days a week)" },
   ];
 
-  // Handle Gender Change
   const handleGenderChange = (e) => {
     const selectedGender = e.target.value;
     setGender(selectedGender);
-
-    // Update PA values based on gender
     setPaOptions(selectedGender === "male" ? malePA : femalePA);
   };
 
@@ -77,10 +75,13 @@ const Eer = () => {
     }
 
     try {
-      const token = localStorage.getItem("token"); // Get the token from local storage
+      const token = localStorage.getItem("token");
       if (!token) {
         throw new Error("No token found. Please log in.");
       }
+
+      await new Promise((resolve) => setTimeout(resolve, 750));
+
       const response = await axiosInstance.post(
         "/eer/calculate",
         {
@@ -92,7 +93,7 @@ const Eer = () => {
         },
         {
           headers: {
-            Authorization: `Bearer ${token}`, // Include the token in the request headers
+            Authorization: `Bearer ${token}`,
           },
         }
       );
@@ -107,11 +108,9 @@ const Eer = () => {
   };
 
   return (
-    <div className="flex">
-      <div>
-        <Sidebar />
-      </div>
-      <div className="w-full min-h-screen m-5">
+    <div className="flex flex-col md:flex-row">
+      <Sidebar />
+      <div className="w-full min-h-screen p-2 md:p-5">
         {/* Typing Effect for Heading */}
         <motion.div
           className="flex w-full items-center justify-center mb-2"
@@ -119,83 +118,89 @@ const Eer = () => {
           animate="visible"
           variants={textVariants}
         >
-          <h1 className="text-teal-800 font-extrabold italic text-5xl">
+          <h1 className="text-teal-800 font-extrabold italic text-2xl md:text-4xl lg:text-5xl text-center">
             Estimated Energy Requirements
           </h1>
         </motion.div>
 
         {/* Floating Description */}
         <motion.div
-          className="w-[1200px] h-[100px]"
+          className="w-full md:w-[90%] lg:w-[1200px] h-auto mx-auto"
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, ease: "easeInOut" }}
         >
-          <p className="text-2xl italic text-orange-400 font-bold">
+          <p className="text-xl md:text-2xl italic text-orange-400 font-bold">
             What is Estimated Energy Requirement?
           </p>
           <motion.p
-            className="text-lg"
+            className="text-base md:text-lg"
             initial="hidden"
             animate="visible"
             variants={fadeInUp}
           >
             Estimated Energy Requirements (EERs) are measurements based on
             formulas, developed by the Food and Nutrition Board, that estimate
-            energy needs using a person’s weight, height, gender, age, and
+            energy needs using a person's weight, height, gender, age, and
             physical activity level.
           </motion.p>
         </motion.div>
 
         {/* Flip Card Animation for Benefits */}
         <motion.div
-          className="bg-orange-300 rounded-2xl border-4 border-teal-800 h-auto w-[1325px] p-4 space-y-2 mb-5"
+          className="bg-orange-300 rounded-2xl border-4 border-teal-800 h-auto w-full md:w-[95%] lg:w-[1325px] p-2 md:p-4 space-y-2 mb-5 mx-auto"
           initial="hidden"
           animate="visible"
           variants={staggerContainer}
         >
           <div className="flex">
-            <h1 className="font-bold text-4xl items-center justify-center text-white neon-glow">
+            <h1 className="font-bold text-xl md:text-2xl lg:text-4xl items-center justify-center text-white neon-glow text-center w-full">
               WHY YOU MUST KNOW YOUR EER
             </h1>
           </div>
 
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-2 font-extrabold text-white">
+          <div className="grid grid-cols-1 gap-4 md:gap-6 md:grid-cols-2 lg:grid-cols-2 font-extrabold text-white">
             {[
               "Helps with weight management! ⚖️ Knowing your EER allows you to maintain, lose, or gain weight effectively based on your goals.",
-              "Optimizes physical performance! 🏋️ By understanding your energy needs, you can fuel your body properly for workouts and daily activities.",
+              "Optimizes physical performance! � By understanding your energy needs, you can fuel your body properly for workouts and daily activities.",
               "Prevents over or under-eating! 🍽️ Your EER helps you balance calorie intake to avoid excessive weight gain or malnutrition.",
               "Supports metabolism and overall health! 💖 A well-balanced diet based on your EER ensures your body gets the necessary nutrients.",
               "Customizes diet plans! 🥗 Whether you're an athlete, a busy professional, or someone managing a health condition, your EER helps tailor your nutrition.",
             ].map((point, index) => (
               <motion.div
                 key={index}
-                className="bg-teal-800 border border-white p-4 rounded-lg shadow-md flex items-center cursor-pointer"
+                className="bg-teal-800 border border-white p-3 md:p-4 rounded-lg shadow-md flex items-center cursor-pointer"
                 initial="hidden"
                 animate="visible"
                 whileHover="whileHover"
                 variants={flipCard}
               >
-                <span className="text-orange-600 text-3xl">{index + 1}️⃣</span>
-                <p className="ml-4">{point}</p>
+                <span className="text-orange-600 text-xl md:text-2xl lg:text-3xl">
+                  {index + 1}️⃣
+                </span>
+                <p className="ml-2 md:ml-4 text-sm md:text-base">{point}</p>
               </motion.div>
             ))}
           </div>
         </motion.div>
-        <div className="bg-teal-800 rounded-2xl border-4 border-white w-[1325px] p-6 flex flex-col items-center">
-          <h3 className="text-2xl text-white mb-4">Calculate your EER</h3>
+
+        {/* Calculator Form */}
+        <div className="bg-teal-800 rounded-2xl border-4 border-white w-full md:w-[95%] lg:w-[1325px] p-4 md:p-6 flex flex-col items-center mx-auto">
+          <h3 className="text-xl md:text-2xl text-white mb-4">
+            Calculate your EER
+          </h3>
           <form
             onSubmit={(e) => {
               e.preventDefault();
-              {
-                handleCalculate;
-              }
+              handleCalculate();
             }}
-            className="w-full flex flex-col space-y-6 items-center"
+            className="w-full flex flex-col space-y-4 md:space-y-6 items-center"
           >
             {/* Weight */}
-            <div className="flex flex-col w-3/4">
-              <label className="text-white text-lg mb-1">Weight (kg)</label>
+            <div className="flex flex-col w-full md:w-3/4">
+              <label className="text-white text-base md:text-lg mb-1">
+                Weight (kg)
+              </label>
               <input
                 type="number"
                 onChange={(e) => setWeight(e.target.value)}
@@ -208,8 +213,10 @@ const Eer = () => {
             </div>
 
             {/* Height */}
-            <div className="flex flex-col w-3/4">
-              <label className="text-white text-lg mb-1">Height (m)</label>
+            <div className="flex flex-col w-full md:w-3/4">
+              <label className="text-white text-base md:text-lg mb-1">
+                Height (m)
+              </label>
               <input
                 type="number"
                 onChange={(e) => setHeight(e.target.value)}
@@ -222,8 +229,10 @@ const Eer = () => {
             </div>
 
             {/* Age */}
-            <div className="flex flex-col w-3/4">
-              <label className="text-white text-lg mb-1">Age</label>
+            <div className="flex flex-col w-full md:w-3/4">
+              <label className="text-white text-base md:text-lg mb-1">
+                Age
+              </label>
               <input
                 type="number"
                 placeholder="Enter your age"
@@ -236,8 +245,10 @@ const Eer = () => {
             </div>
 
             {/* Gender */}
-            <div className="flex flex-col w-3/4">
-              <label className="text-white text-lg mb-1">Gender</label>
+            <div className="flex flex-col w-full md:w-3/4">
+              <label className="text-white text-base md:text-lg mb-1">
+                Gender
+              </label>
               <select
                 name="gender"
                 className="p-2 rounded-md border border-white bg-teal-700 text-white"
@@ -251,8 +262,8 @@ const Eer = () => {
             </div>
 
             {/* Physical Activity Level */}
-            <div className="flex flex-col w-3/4">
-              <label className="text-white text-lg mb-1">
+            <div className="flex flex-col w-full md:w-3/4">
+              <label className="text-white text-base md:text-lg mb-1">
                 Physical Activity Level
               </label>
               <select
@@ -263,7 +274,9 @@ const Eer = () => {
               >
                 <option value="">Select activity level</option>
                 {paOptions.map((pa) => (
-                  <option value={pa.value}>{pa.label}</option>
+                  <option key={pa.value} value={pa.value}>
+                    {pa.label}
+                  </option>
                 ))}
               </select>
             </div>
@@ -271,8 +284,7 @@ const Eer = () => {
             {/* Submit Button */}
             <button
               type="submit"
-              onClick={handleCalculate}
-              className="h-[38px] w-50 bg-white text-teal-800 font-bold rounded-md hover:bg-orange-300 hover:text-white cursor-pointer px-6"
+              className="h-[38px] w-full md:w-auto bg-white text-teal-800 font-bold rounded-md hover:bg-orange-300 hover:text-white cursor-pointer px-6 mt-4"
             >
               Calculate
             </button>

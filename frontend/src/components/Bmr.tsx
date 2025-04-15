@@ -4,23 +4,32 @@ import { FaLightbulb } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../services/axiosInstance";
 import { motion } from "framer-motion";
+import { FaSpinner } from "react-icons/fa"; // Add this for the spinner icon
 
 const Bmr = () => {
   const [weight, setWeight] = useState<string>("");
   const [gender, setGender] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
+  const [loading, setLoading] = useState<boolean>(false);
 
   const handleCalculate = async () => {
     try {
+      setLoading(true); // Start loading
       const token = localStorage.getItem("token");
-      if (!token) throw new Error("No token found. Please log in.");
+      if (!token) {
+        throw new Error("No token found. Please log in.");
+      }
+
+      await new Promise((resolve) => setTimeout(resolve, 750));
 
       const response = await axiosInstance.post(
         "/bmr/calculate",
-        { weight: parseFloat(weight), gender },
+        { weight: parseFloat(weight), gender: gender },
         {
-          headers: { Authorization: `Bearer ${token}` },
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
       );
 
@@ -31,6 +40,8 @@ const Bmr = () => {
       setError(
         "Failed to calculate BMR, please check your inputs and try again later."
       );
+    } finally {
+      setLoading(false); // Stop loading
     }
   };
 
@@ -153,9 +164,17 @@ const Bmr = () => {
 
             <button
               type="submit"
-              className="h-[38px] px-6 bg-white text-teal-800 font-bold rounded hover:bg-orange-300 hover:text-white transition"
+              className="h-[38px] w-50 bg-white text-teal-800 font-bold rounded hover:bg-orange-300 hover:text-white cursor-pointer flex items-center justify-center space-x-2 px-4 disabled:opacity-60"
+              disabled={loading}
             >
-              Calculate
+              {loading ? (
+                <>
+                  <FaSpinner className="animate-spin" />
+                  <span>Calculating...</span>
+                </>
+              ) : (
+                "Calculate"
+              )}
             </button>
 
             {error && (
