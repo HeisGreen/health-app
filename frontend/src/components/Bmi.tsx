@@ -104,7 +104,7 @@ const Bmi = () => {
                   value={height}
                   onChange={(e) => setHeight(e.target.value)}
                   placeholder={`Height (${useImperial ? "m" : "ft"})`}
-                  className="w-full md:w-3/4 p-2 rounded border border-gray-300 text-black"
+                  className="w-full md:w-3/4 p-2 rounded border border-gray-300 text-white"
                   required
                 />
 
@@ -114,7 +114,7 @@ const Bmi = () => {
                   value={weight}
                   onChange={(e) => setWeight(e.target.value)}
                   placeholder={`Weight (${useImperial ? "Kg" : "Lb"})`}
-                  className="w-full md:w-3/4 p-2 rounded border border-gray-300 text-black"
+                  className="w-full md:w-3/4 p-2 rounded border border-gray-300 text-white"
                   required
                 />
 

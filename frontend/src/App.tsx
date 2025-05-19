@@ -10,7 +10,7 @@ import Tips from "./components/Tips.jsx";
 import Tracker from "./components/Tracker.jsx";
 import Planner from "./components/Planner.jsx";
 import Forum from "./components/Forum.jsx";
-import { Profile } from "./components/Profile.jsx";
+import { Profile } from "./components/Profile.tsx";
 import Settings from "./components/Settings.tsx";
 import Bmi from "./components/Bmi.tsx";
 import BmiUw from "./success/BmiUw.tsx";
