@@ -16,5 +16,6 @@ public class AccountUtils {
     public static final String PASSWORD_INCORRECT_MESSAGE = "The current password you entered is incorrect";
 
 
-
+    public static final String PROFILE_UPDATE_SUCCESS_CODE = "220";
+    public static final String PROFILE_UPDATE_SUCCESS_MESSAGE = "Profile updated successfully";
 }

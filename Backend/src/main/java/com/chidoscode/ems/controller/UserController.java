@@ -3,7 +3,10 @@ package com.chidoscode.ems.controller;
 import com.chidoscode.ems.dto.*;
 import com.chidoscode.ems.service.impl.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.security.Principal;
 
 @CrossOrigin(origins = {"http://localhost:5173", "hhttps://health-app-ivory-one.vercel.app/"})
 @RestController
@@ -37,6 +40,22 @@ public class UserController {
     public UserResponse deleteAccount(@RequestHeader("Authorization") String token){
         return userService.deleteAccount(token);
     }
+
+    @GetMapping("/profile")
+    public ResponseEntity<UserProfileDto> getProfile(Principal principal) {
+        String email = principal.getName(); // Extracted from JWT
+        UserProfileDto profile = userService.getUserProfile(email);
+        return ResponseEntity.ok(profile);
+    }
+
+    @PutMapping("/profile")
+    public ResponseEntity<String> updateProfile(@RequestBody UserProfileDto profileDTO, Principal principal) {
+        String email = principal.getName(); // Extracted from JWT
+        userService.updateUserProfile(email, profileDTO);
+        return ResponseEntity.ok("Profile updated successfully");
+    }
+
+
 }
 
 

@@ -27,8 +27,9 @@ public class User implements UserDetails {
     private String password;
     private String gender;
     private String department;
-    private String  address;
+    private String address;
     private String phoneNumber;
+    private String profilePicture;
     private Role role;
 
     @Override

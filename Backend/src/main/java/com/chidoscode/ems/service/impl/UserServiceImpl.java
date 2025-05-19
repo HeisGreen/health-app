@@ -15,8 +15,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Map;
-
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -137,6 +135,38 @@ public class UserServiceImpl implements UserService {
         return UserResponse.builder()
                 .responseCode(AccountUtils.ACCOUNT_DELETION_CODE)
                 .responseMessage(AccountUtils.ACCOUNT_DELETION_MESSAGE)
+                .build();
+    }
+
+    @Override
+    public UserProfileDto getUserProfile(String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        return new UserProfileDto().builder()
+                .firstName(user.getFirstName())
+                .lastName(user.getLastName())
+                .email(user.getEmail())
+                .gender(user.getGender())
+                .phoneNumber(user.getPhoneNumber())
+                .profilePicture(user.getProfilePicture())
+                .build();
+}
+
+    @Override
+    public UserResponse updateUserProfile(String email, UserProfileDto userProfileDto) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        user.setFirstName(userProfileDto.getFirstName());
+        user.setLastName(userProfileDto.getLastName());
+        user.setGender(userProfileDto.getGender());
+        user.setPhoneNumber(userProfileDto.getPhoneNumber());
+        user.setProfilePicture(userProfileDto.getProfilePicture());
+
+        userRepository.save(user);
+        return UserResponse.builder()
+                .responseCode(AccountUtils.PROFILE_UPDATE_SUCCESS_CODE)
+                .responseMessage(AccountUtils.PROFILE_UPDATE_SUCCESS_MESSAGE)
                 .build();
     }
 }
