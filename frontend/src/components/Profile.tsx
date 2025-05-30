@@ -19,7 +19,7 @@ export const Profile = () => {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const res = await fetch("http://localhost:8081/api/user/profile", {
+        const res = await fetch("http://localhost:8080/api/user/profile", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
