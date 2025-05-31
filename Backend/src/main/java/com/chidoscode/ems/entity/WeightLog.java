@@ -23,6 +23,4 @@ public class WeightLog {
     private double weightInKg;
     private LocalDate logDate;
 
-    // Additional fields can be added as needed
-
 }
