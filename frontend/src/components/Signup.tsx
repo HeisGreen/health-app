@@ -67,7 +67,10 @@ const Signup = ({ setIsLoggedIn, setFirstName, setLastName }: SignupProps) => {
         <h2 className="text-xl sm:text-3xl font-bold text-white text-center mb-4 neon-glow">
           Create an Account with Us
         </h2>
-        <form onSubmit={handleSubmit} className="grid grid-cols-1 gap-4">
+        <form
+          onSubmit={handleSubmit}
+          className="grid grid-cols-1 gap-4 text-orange-300"
+        >
           <input
             type="text"
             name="firstName"
