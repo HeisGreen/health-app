@@ -1,0 +1,37 @@
+package com.chidoscode.ems.entity;
+
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import java.time.LocalDate;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
+@Table(name = "health_metrics")
+public class HealthMetrics {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
+    @Column(nullable = false, updatable = false)
+    private LocalDate recordedAt = LocalDate.now(); // Auto-set to current date
+
+    @Column(nullable = true)  // All metrics optional
+    private Double bmi;
+
+    @Column(nullable = true)
+    private Double bmr;
+
+    @Column(nullable = true)
+    private Double eer;
+}
