@@ -169,4 +169,10 @@ public class UserServiceImpl implements UserService {
                 .responseMessage(AccountUtils.PROFILE_UPDATE_SUCCESS_MESSAGE)
                 .build();
     }
+
+    @Override
+    public User getUserById(Long userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with id: " + userId));
+    }
 }

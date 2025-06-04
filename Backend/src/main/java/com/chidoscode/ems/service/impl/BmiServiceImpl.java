@@ -2,29 +2,63 @@ package com.chidoscode.ems.service.impl;
 
 import com.chidoscode.ems.dto.BmiRequest;
 import com.chidoscode.ems.dto.UserResponse;
+import com.chidoscode.ems.entity.HealthMetrics;
+import com.chidoscode.ems.entity.User;
+import com.chidoscode.ems.repository.HealthMetricsRepository;
+import com.chidoscode.ems.repository.UserRepository;
 import com.chidoscode.ems.utils.AccountUtils;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.text.DecimalFormat;
-
+import java.time.LocalDate;
 
 @Service
-public class BmiServiceImpl implements BmiService{
+@RequiredArgsConstructor
+public class BmiServiceImpl implements BmiService {
+
+    @Autowired
+    HealthMetricsRepository healthMetricsRepo;
+
+    @Autowired
+    UserRepository userRepository;
 
     @Override
-    public double calculateBmi(BmiRequest bmiRequest) {
-        double weight = bmiRequest.getWeight();
-        double height = bmiRequest.getHeight();
-
-        if (weight <= 0 && height <= 0){
-             UserResponse.builder()
-                     .responseCode(AccountUtils.NULL_VALUE_CODE)
-                     .responseMessage(AccountUtils.NULL_VALUE_MESSAGE)
-                    .build();
+    @Transactional
+    public double calculateBmi(BmiRequest bmiRequest, String username) {
+        // 1. Validate input (your existing code)
+        if (bmiRequest.getWeight() <= 0 || bmiRequest.getHeight() <= 0) {
+            throw new IllegalArgumentException(
+                    UserResponse.builder()
+                            .responseCode(AccountUtils.NULL_VALUE_CODE)
+                            .responseMessage(AccountUtils.NULL_VALUE_MESSAGE)
+                            .build()
+                            .getResponseMessage()
+            );
         }
-       double bmi = (weight / (height * height));
 
+        User user = userRepository.findByEmail(username).orElseThrow(() -> new RuntimeException("This user does not exist"));
+
+        // 3. Calculate BMI (your existing logic)
+        double bmi = bmiRequest.getWeight() / Math.pow(bmiRequest.getHeight(), 2);
         DecimalFormat df = new DecimalFormat("#.##");
-        return Double.parseDouble(df.format(bmi));
+        double formattedBmi = Double.parseDouble(df.format(bmi));
+
+        // 4. Save to HealthMetrics
+        HealthMetrics metrics = healthMetricsRepo
+                .findByUserAndRecordedAt(user, LocalDate.now())
+                .orElseGet(() -> {
+                    HealthMetrics metricsR = new HealthMetrics();
+                    metricsR.setUser(user);
+                    metricsR.setRecordedAt(LocalDate.now());
+                    return metricsR;
+                });
+
+        metrics.setBmi(formattedBmi);
+        healthMetricsRepo.save(metrics);
+
+        return formattedBmi;
     }
 }

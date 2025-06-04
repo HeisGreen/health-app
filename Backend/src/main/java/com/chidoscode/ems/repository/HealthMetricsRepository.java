@@ -8,13 +8,14 @@ import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 public interface HealthMetricsRepository extends JpaRepository<HealthMetrics, Long> {
     // Find all metrics for a user (sorted newest first)
     List<HealthMetrics> findByUserOrderByRecordedAtDesc(User user);
 
     // Find metrics for a user on a specific date
-    HealthMetrics findByUserAndRecordedAt(User user, LocalDate date);
+    Optional<HealthMetrics> findByUserAndRecordedAt(User user, LocalDate date);
 
     // Find latest non-null metrics of each type
     @Query("SELECT hm FROM HealthMetrics hm WHERE " +
