@@ -52,18 +52,17 @@ public class BmrServiceImpl implements BmrService {
         double formattedBmr = Double.parseDouble(df.format(bmr));
 
         // 4. Save to HealthMetrics
-        HealthMetrics metrics = healthMetricsRepo
-                .findByUserAndRecordedAt(user, LocalDate.now())
-                .orElseGet(() -> {
-                    HealthMetrics newMetrics = new HealthMetrics();
-                    newMetrics.setUser(user);
-                    newMetrics.setRecordedAt(LocalDate.now());
-                    return newMetrics;
-                });
 
-        metrics.setBmr(formattedBmr); // Fixed: was incorrectly setting BMI
+        HealthMetrics metrics = new HealthMetrics();
+        metrics.setUser(user);
+        metrics.setRecordedAt(LocalDate.now());
+        metrics.setBmr(formattedBmr);
+
+        // Clear other metrics to avoid confusion
+        metrics.setBmi(null);
+        metrics.setEer(null);
+
         healthMetricsRepo.save(metrics);
-
         return formattedBmr;
     }
 }

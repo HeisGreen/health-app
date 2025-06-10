@@ -46,17 +46,16 @@ public class BmiServiceImpl implements BmiService {
         DecimalFormat df = new DecimalFormat("#.##");
         double formattedBmi = Double.parseDouble(df.format(bmi));
 
-        // 4. Save to HealthMetrics
-        HealthMetrics metrics = healthMetricsRepo
-                .findByUserAndRecordedAt(user, LocalDate.now())
-                .orElseGet(() -> {
-                    HealthMetrics metricsR = new HealthMetrics();
-                    metricsR.setUser(user);
-                    metricsR.setRecordedAt(LocalDate.now());
-                    return metricsR;
-                });
-
+        // Always create new record
+        HealthMetrics metrics = new HealthMetrics();
+        metrics.setUser(user);
+        metrics.setRecordedAt(LocalDate.now());
         metrics.setBmi(formattedBmi);
+
+        // Clear other metrics to avoid confusion
+        metrics.setBmr(null);
+        metrics.setEer(null);
+
         healthMetricsRepo.save(metrics);
 
         return formattedBmi;

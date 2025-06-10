@@ -54,16 +54,15 @@ public class EerServiceImpl implements EerService {
         double formattedEer = Double.parseDouble(df.format(eer));
 
         // 4. Save to HealthMetrics
-        HealthMetrics metrics = healthMetricsRepo
-                .findByUserAndRecordedAt(user, LocalDate.now())
-                .orElseGet(() -> {
-                    HealthMetrics newMetrics = new HealthMetrics();
-                    newMetrics.setUser(user);
-                    newMetrics.setRecordedAt(LocalDate.now());
-                    return newMetrics;
-                });
+        HealthMetrics metrics = new HealthMetrics();
+        metrics.setUser(user);
+        metrics.setRecordedAt(LocalDate.now());
+        metrics.setEer(formattedEer);
 
-        metrics.setEer(formattedEer); // Correctly setting EER
+        // Clear other metrics to avoid confusion
+        metrics.setBmi(null);
+        metrics.setBmr(null);
+
         healthMetricsRepo.save(metrics);
 
         return formattedEer;
