@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.text.DecimalFormat;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
@@ -56,7 +57,7 @@ public class EerServiceImpl implements EerService {
         // 4. Save to HealthMetrics
         HealthMetrics metrics = new HealthMetrics();
         metrics.setUser(user);
-        metrics.setRecordedAt(LocalDate.now());
+        metrics.setRecordedAt(LocalDateTime.now());
         metrics.setEer(formattedEer);
 
         // Clear other metrics to avoid confusion

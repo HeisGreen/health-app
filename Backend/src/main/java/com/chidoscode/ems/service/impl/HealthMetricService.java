@@ -1,9 +1,10 @@
 package com.chidoscode.ems.service.impl;
 
+import com.chidoscode.ems.dto.MetricResponseDto;
 import com.chidoscode.ems.entity.HealthMetrics;
 
 public interface HealthMetricService {
-    public HealthMetrics saveMetric(Long userId, String metricType, Double value);
+    public HealthMetrics saveMetric(String username, String metricType, Double value);
 
-    public HealthMetrics getLatestMetrics(Long userId);
+    public MetricResponseDto getLatestMetrics(String username);
 }

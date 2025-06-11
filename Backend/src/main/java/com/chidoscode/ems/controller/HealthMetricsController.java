@@ -1,5 +1,6 @@
 package com.chidoscode.ems.controller;
 
+import com.chidoscode.ems.dto.MetricResponseDto;
 import com.chidoscode.ems.entity.HealthMetrics;
 import com.chidoscode.ems.service.impl.HealthMetricService;
 import lombok.RequiredArgsConstructor;
@@ -22,20 +23,20 @@ public class HealthMetricsController {
             @RequestParam Double value,
             @AuthenticationPrincipal UserDetails userDetails
     ) {
-        Long userId = Long.parseLong(userDetails.getUsername());
+        String username = userDetails.getUsername();
         return ResponseEntity.ok(
-                metricsService.saveMetric(userId, metricType, value)
+                metricsService.saveMetric(username, metricType, value)
         );
     }
 
 
     @GetMapping("/latest")
-    public ResponseEntity<HealthMetrics> getLatestMetrics(
+    public ResponseEntity<MetricResponseDto> getLatestMetrics(
             @AuthenticationPrincipal UserDetails userDetails
     ) {
-        Long userId = Long.parseLong(userDetails.getUsername());
+        String username = userDetails.getUsername();
         return ResponseEntity.ok(
-                metricsService.getLatestMetrics(userId)
+                metricsService.getLatestMetrics(username)
         );
     }
 

@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.text.DecimalFormat;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
@@ -49,7 +50,7 @@ public class BmiServiceImpl implements BmiService {
         // Always create new record
         HealthMetrics metrics = new HealthMetrics();
         metrics.setUser(user);
-        metrics.setRecordedAt(LocalDate.now());
+        metrics.setRecordedAt(LocalDateTime.now());
         metrics.setBmi(formattedBmi);
 
         // Clear other metrics to avoid confusion

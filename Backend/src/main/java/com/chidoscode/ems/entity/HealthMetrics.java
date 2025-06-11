@@ -1,9 +1,11 @@
 package com.chidoscode.ems.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -19,10 +21,11 @@ public class HealthMetrics {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
+    @JsonIgnore
     private User user;
 
     @Column(nullable = false, updatable = false)
-    private LocalDate recordedAt = LocalDate.now(); // Auto-set to current date
+    private LocalDateTime recordedAt = LocalDateTime.now(); // Auto-set to current date
 
     @Column(nullable = true)  // All metrics optional
     private Double bmi;
