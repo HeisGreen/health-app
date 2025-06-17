@@ -12,15 +12,17 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class HealthMetricsServiceImpl implements HealthMetricService{
 
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
 
     @Autowired
-    HealthMetricsRepository metricsRepository;
+    private HealthMetricsRepository metricsRepository;
 
     @Override
     @Transactional
@@ -58,5 +60,19 @@ public class HealthMetricsServiceImpl implements HealthMetricService{
         HealthMetrics latestEer = metricsRepository.findTop1ByUserAndEerIsNotNullOrderByRecordedAtDesc(user);
 
         return MetricResponseDto.fromMultipleEntities(latestBmi, latestBmr, latestEer);
+    }
+
+    @Override
+    public List<MetricResponseDto> getMetricTrends(String username) {
+        List<HealthMetrics> metrics = metricsRepository.findAllByUser_EmailOrderByRecordedAtAsc(username);
+
+        return metrics.stream().map(metric -> {
+            MetricResponseDto dto = new MetricResponseDto();
+            dto.setBmi(metric.getBmi());
+            dto.setBmr(metric.getBmr());
+            dto.setEer(metric.getEer());
+            dto.setRecordedAt(metric.getRecordedAt());
+            return dto;
+        }).collect(Collectors.toList());
     }
 }

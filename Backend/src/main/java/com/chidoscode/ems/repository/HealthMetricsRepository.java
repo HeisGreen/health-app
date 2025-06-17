@@ -5,6 +5,7 @@ import com.chidoscode.ems.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -24,6 +25,9 @@ public interface HealthMetricsRepository extends JpaRepository<HealthMetrics, Lo
     HealthMetrics findTop1ByUserAndBmrIsNotNullOrderByRecordedAtDesc(User user);
 
     HealthMetrics findTop1ByUserAndEerIsNotNullOrderByRecordedAtDesc(User user);
+
+    List<HealthMetrics> findAllByUser_EmailOrderByRecordedAtAsc(String email);
+
 
     // Get all metrics for a user (sorted by date/time ascending)
     @Query("SELECT hm FROM HealthMetrics hm WHERE hm.user.id = :userId ORDER BY hm.recordedAt ASC")
