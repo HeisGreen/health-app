@@ -22,10 +22,18 @@ interface MetricData {
 }
 
 interface MetricTrendData {
+  bmi: number | null;
+  bmr: number | null;
+  eer: number | null;
+  recordedAt: string;
+}
+
+interface HealthStatus {
+  status: string;
+  message: string;
   bmi: number;
   bmr: number;
   eer: number;
-  recordedAt: string;
 }
 
 const Dashboard = () => {
@@ -36,6 +44,7 @@ const Dashboard = () => {
   const [metrics, setMetrics] = useState<MetricData | null>(null);
   const [metricTrends, setMetricTrends] = useState<MetricTrendData[]>([]);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [healthStatus, setHealthStatus] = useState<HealthStatus | null>(null);
 
   const token = localStorage.getItem("token") || "";
   const navigate = useNavigate();
@@ -50,14 +59,45 @@ const Dashboard = () => {
     fetchWeightData();
     fetchLatestMetrics();
     fetchMetricTrends();
+    fetchHealthStatus();
   }, []);
+
+  const fetchHealthStatus = async () => {
+    try {
+      const rest = await fetch("http://localhost:8080/api/user/profile", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (!rest.ok) throw new Error("Failed to fetch profile");
+      const user = await rest.json();
+
+      const username = user.email; // Adjust if backend expects a space or different format
+      const res = await fetch(
+        `http://localhost:8080/api/health/status?username=${username}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      if (res.status === 401 || res.status === 403) {
+        handleLogout();
+        return;
+      }
+      const data = await res.json();
+      setHealthStatus(data);
+    } catch (err) {
+      console.error("Failed to fetch health status", err);
+    }
+  };
 
   const fetchWeightData = async () => {
     try {
       const response = await fetch("http://localhost:8080/api/weight", {
         headers: { Authorization: `Bearer ${token}` },
       });
-      if (response.status === 401) {
+      if (response.status === 401 || response.status === 403) {
         handleLogout();
         return;
       }
@@ -125,6 +165,82 @@ const Dashboard = () => {
     navigate("/login");
   };
 
+  const interpretWeightTrend = (): string => {
+    if (weightData.length < 2) return "Not enough data to analyze trend.";
+
+    const sorted = [...weightData].sort(
+      (a, b) => new Date(a.logDate).getTime() - new Date(b.logDate).getTime()
+    );
+    const startWeight = sorted[0].weightInKg;
+    const endWeight = sorted[sorted.length - 1].weightInKg;
+    const diff = endWeight - startWeight;
+
+    const absDiff = Math.abs(diff).toFixed(1);
+
+    if (diff > 2) {
+      return `⚠️ You've gained around ${absDiff} kg. Consider reviewing your eating habits, physical activity, and stress levels.`;
+    } else if (diff > 0.5) {
+      return `🟡 A slight increase of ${absDiff} kg. Stay active and keep monitoring.`;
+    } else if (diff < -2) {
+      return `✅ You've lost ${absDiff} kg. Impressive work—keep up the healthy lifestyle!`;
+    } else if (diff < -0.5) {
+      return `🟢 A mild weight drop of ${absDiff} kg. Great progress—stay consistent.`;
+    } else {
+      return "📊 Your weight has been quite stable. Good job maintaining balance!";
+    }
+  };
+
+  const getHealthAdvice = (): string => {
+    if (!healthStatus) return "";
+
+    const { bmi, bmr, eer } = healthStatus;
+
+    const tips: string[] = [];
+
+    // BMI-based advice
+    if (bmi < 18.5) {
+      tips.push(
+        "Consider increasing your calorie intake and strength training to reach a healthy BMI."
+      );
+    } else if (bmi >= 25 && bmi < 30) {
+      tips.push(
+        "You're slightly overweight. A consistent workout routine and mindful eating can help."
+      );
+    } else if (bmi >= 30) {
+      tips.push(
+        "Obesity increases health risks. Consult a health professional to develop a weight loss plan."
+      );
+    }
+
+    // BMR-based advice
+    if (bmr < 1200) {
+      tips.push(
+        "Your BMR is low—ensure you're eating enough and engaging in muscle-building exercises."
+      );
+    } else if (bmr > 1800) {
+      tips.push(
+        "Your BMR is high—maintain nutrient-dense meals to fuel your metabolism."
+      );
+    }
+
+    // EER-based advice
+    if (eer < 1800) {
+      tips.push(
+        "Your energy needs are below average. Focus on small, frequent nutritious meals."
+      );
+    } else if (eer > 2500) {
+      tips.push(
+        "You're burning a lot! Ensure your food intake supports your energy expenditure."
+      );
+    }
+
+    if (tips.length === 0) {
+      return "You're doing well! Maintain a balanced diet, hydration, and regular exercise.";
+    }
+
+    return tips.join(" ");
+  };
+
   const interpretBMI = (bmi: number | null): string => {
     if (bmi === null) return "Not available";
     if (bmi < 18.5) return "Underweight";
@@ -133,28 +249,61 @@ const Dashboard = () => {
     return "Obese";
   };
 
+  const interpretBMR = (bmr: number | null): string => {
+    if (bmr === null) return "Not available";
+    if (bmr < 1200) return "Low";
+    if (bmr <= 1800) return "Normal";
+    return "High";
+  };
+
+  const interpretEER = (eer: number | null): string => {
+    if (eer === null) return "Not available";
+    if (eer < 1800) return "Below Average";
+    if (eer <= 2500) return "Average";
+    return "Above Average";
+  };
+
+  // Filter metric trends
+  const bmiData = metricTrends
+    .filter((m) => m.bmi !== null)
+    .map((m) => ({
+      x: new Date(m.recordedAt).toLocaleDateString(),
+      y: m.bmi!,
+    }));
+
+  const bmrData = metricTrends
+    .filter((m) => m.bmr !== null)
+    .map((m) => ({
+      x: new Date(m.recordedAt).toLocaleDateString(),
+      y: m.bmr!,
+    }));
+
+  const eerData = metricTrends
+    .filter((m) => m.eer !== null)
+    .map((m) => ({
+      x: new Date(m.recordedAt).toLocaleDateString(),
+      y: m.eer!,
+    }));
+
   const metricTrendChartData = {
-    labels: metricTrends.map((d) =>
-      new Date(d.recordedAt).toLocaleDateString()
-    ),
     datasets: [
       {
         label: "BMI",
-        data: metricTrends.map((d) => d.bmi),
+        data: bmiData,
         borderColor: "rgb(59, 130, 246)",
         backgroundColor: "rgba(59, 130, 246, 0.1)",
         tension: 0.4,
       },
       {
         label: "BMR",
-        data: metricTrends.map((d) => d.bmr),
+        data: bmrData,
         borderColor: "rgb(16, 185, 129)",
         backgroundColor: "rgba(16, 185, 129, 0.1)",
         tension: 0.4,
       },
       {
         label: "EER",
-        data: metricTrends.map((d) => d.eer),
+        data: eerData,
         borderColor: "rgb(249, 115, 22)",
         backgroundColor: "rgba(249, 115, 22, 0.1)",
         tension: 0.4,
@@ -164,7 +313,7 @@ const Dashboard = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Mobile Header */}
+      {/* Header and Sidebar */}
       <div className="lg:hidden bg-white shadow-sm p-4 flex items-center justify-between">
         <button
           onClick={() => setIsSidebarOpen(!isSidebarOpen)}
@@ -224,6 +373,9 @@ const Dashboard = () => {
                   }}
                   options={{ responsive: true, maintainAspectRatio: false }}
                 />
+                <p className="mt-4 text-sm text-center italic text-gray-600">
+                  🩺 {interpretWeightTrend()}
+                </p>
               </div>
             ) : (
               <p className="text-gray-500 py-8 text-center">
@@ -264,6 +416,12 @@ const Dashboard = () => {
               <div className="mt-2 text-center text-sm font-semibold text-gray-700">
                 BMI Status: {interpretBMI(metrics.bmi)}
               </div>
+              <div className="mt-1 text-center text-sm font-semibold text-gray-700">
+                BMR Status: {interpretBMR(metrics.bmr)}
+              </div>
+              <div className="mt-1 text-center text-sm font-semibold text-gray-700">
+                EER Status: {interpretEER(metrics.eer)}
+              </div>
             </div>
           )}
 
@@ -278,6 +436,43 @@ const Dashboard = () => {
                   data={metricTrendChartData}
                   options={{ responsive: true, maintainAspectRatio: false }}
                 />
+              </div>
+            </div>
+          )}
+
+          {healthStatus && (
+            <div className="bg-white p-4 rounded-lg shadow-md mb-6">
+              <h2 className="text-lg font-semibold mb-4">Health Summary</h2>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center mb-4">
+                <div>
+                  <p className="text-sm text-gray-500">BMI</p>
+                  <p className="text-xl font-bold text-orange-500">
+                    {healthStatus.bmi}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-sm text-gray-500">BMR</p>
+                  <p className="text-xl font-bold text-orange-500">
+                    {healthStatus.bmr}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-sm text-gray-500">EER</p>
+                  <p className="text-xl font-bold text-orange-500">
+                    {healthStatus.eer}
+                  </p>
+                </div>
+              </div>
+              <div className="text-center">
+                <p className="text-gray-700 font-semibold">
+                  Status: {healthStatus.status}
+                </p>
+                <p className="text-sm text-gray-600 italic mt-1">
+                  {healthStatus.message}
+                </p>
+                <p className="text-sm text-blue-600 font-medium mt-2">
+                  💡 Advice: {getHealthAdvice()}
+                </p>
               </div>
             </div>
           )}
