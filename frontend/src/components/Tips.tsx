@@ -62,7 +62,7 @@ const Tips = () => {
   return (
     <div className="flex flex-col lg:flex-row w-full min-h-screen ">
       {/* Sidebar */}
-      <div className="lg:w-1/4">
+      <div className="lg:w-1/5.5">
         <Sidebar />
       </div>
 

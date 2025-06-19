@@ -20,7 +20,7 @@ const Sidebar = () => {
     <>
       {/* Mobile Menu Button */}
       <button
-        className="md:hidden fixed top-4 left-4 z-50 p-2 bg-teal-700 text-white rounded-lg shadow-lg"
+        className="md:hidden fixed top-4 left- z-50 p-2 bg-teal-700 text-white rounded-lg shadow-lg"
         onClick={() => setIsMobileOpen(!isMobileOpen)}
       >
         <FaBars size={24} />
