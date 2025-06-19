@@ -54,8 +54,6 @@ public class UserController {
         userService.updateUserProfile(email, profileDTO);
         return ResponseEntity.ok("Profile updated successfully");
     }
-
-
 }
 
 

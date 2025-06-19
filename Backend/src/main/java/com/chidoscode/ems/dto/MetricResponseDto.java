@@ -25,8 +25,18 @@ public class MetricResponseDto {
             HealthMetrics eerMetric
     ) {
 
+        LocalDateTime latestRecordedAt = null;
+
+        if (bmiMetric != null) latestRecordedAt = bmiMetric.getRecordedAt();
+        if (bmrMetric != null && (latestRecordedAt == null || bmrMetric.getRecordedAt().isAfter(latestRecordedAt))) {
+            latestRecordedAt = bmrMetric.getRecordedAt();
+        }
+        if (eerMetric != null && (latestRecordedAt == null || eerMetric.getRecordedAt().isAfter(latestRecordedAt))) {
+            latestRecordedAt = eerMetric.getRecordedAt();
+        }
+
         return MetricResponseDto.builder()
-                .recordedAt(LocalDateTime.now()) // or null, or the latest of the 3 if you prefer
+                .recordedAt(latestRecordedAt) // or null, or the latest of the 3 if you prefer
                 .bmi(bmiMetric != null ? bmiMetric.getBmi() : null)
                 .bmr(bmrMetric != null ? bmrMetric.getBmr() : null)
                 .eer(eerMetric != null ? eerMetric.getEer() : null)

@@ -87,8 +87,6 @@ public class UserServiceImpl implements UserService {
                     .responseMessage("An error occured during login, Please try again")
                     .build();
         }
-
-
     }
 
     @Override
