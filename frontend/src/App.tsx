@@ -6,7 +6,7 @@ import Navbar from "./components/Navbar.jsx";
 import Dashboard from "./components/Dashboard.tsx";
 import Bmr from "./components/Bmr.tsx";
 import Eer from "./components/Eer.tsx";
-import Tips from "./components/Tips.jsx";
+import Tips from "./components/Tips.tsx";
 import Tracker from "./components/Tracker.jsx";
 import Planner from "./components/Planner.jsx";
 import Forum from "./components/Forum.jsx";
