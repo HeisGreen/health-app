@@ -73,11 +73,15 @@ const Tips = () => {
         </h1>
 
         {/* Tip of the Day */}
-        <div className="bg-green-200 p-4 rounded-lg shadow-md mb-6 text-center border-l-4 border-orange-500 animate-fade-in-down">
-          <h2 className="text-md font-semibold text-gray-700 mb-2">
+        <div className="bg-green-200 p-4 rounded-lg shadow-md mb-6 border-l-4 border-orange-500">
+          <h2 className="text-md font-semibold text-gray-700 mb-2 text-center">
             🌟 Tip of the Day
           </h2>
-          <p className="text-gray-800 font-medium">{tipOfTheDay}</p>
+          <div className="overflow-hidden w-full">
+            <p className="text-gray-800 font-medium neon-glow text-2xl animate-marquee">
+              {tipOfTheDay}
+            </p>
+          </div>
         </div>
 
         {/* Category Buttons */}
