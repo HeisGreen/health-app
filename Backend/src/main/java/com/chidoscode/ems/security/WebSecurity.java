@@ -78,7 +78,8 @@ public class WebSecurity {
         // Railway domain will be added dynamically if needed
         configuration.setAllowedOrigins(Arrays.asList(
             "http://localhost:5173",
-            "https://health-app-ivory-one.vercel.app"
+            "https://health-app-ivory-one.vercel.app",
+                "desirable-heart-production.up.railway.app"
         ));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS")); // Allow these HTTP methods
         configuration.setAllowedHeaders(Arrays.asList("*")); // Allow all headers
