@@ -20,6 +20,7 @@ import PrivateRoute from "./components/PrivateRoute.tsx";
 import React, { useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode"; // Import jwt-decode
 import Footer from "./components/Footer.tsx";
+import axiosInstance from "./services/axiosInstance";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false); // Track login status
@@ -41,19 +42,9 @@ function App() {
   // Fetch profile picture
   const fetchProfilePicture = async () => {
     try {
-      const token = localStorage.getItem("token");
-      if (!token) return;
-
-      const response = await fetch("http://localhost:8080/api/user/profile", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      if (response.ok) {
-        const data = await response.json();
-        if (data.profilePicture) {
-          setProfilePicture(data.profilePicture);
-        }
+      const response = await axiosInstance.get("/user/profile");
+      if (response.data.profilePicture) {
+        setProfilePicture(response.data.profilePicture);
       }
     } catch (err) {
       console.error("Failed to fetch profile picture:", err);

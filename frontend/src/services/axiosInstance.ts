@@ -1,8 +1,9 @@
 import axios from 'axios';
+import { getApiUrl } from '../utils/apiConfig';
 
 // Create an Axios instance with a base URL
 const axiosInstance = axios.create({
-  baseURL: 'http://localhost:8080/api', // Replace with your backend API URL
+  baseURL: getApiUrl(),
 });
 
 // Add a request interceptor to automatically add token

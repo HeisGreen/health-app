@@ -5,6 +5,7 @@ import { Line } from "react-chartjs-2";
 import { Chart, registerables } from "chart.js";
 import { useNavigate } from "react-router-dom";
 import Sidebar from "./Sidebar";
+import axiosInstance from "../services/axiosInstance";
 
 Chart.register(...registerables);
 
@@ -46,7 +47,6 @@ const Dashboard = () => {
   const [metricTrends, setMetricTrends] = useState<MetricTrendData[]>([]);
   const [healthStatus, setHealthStatus] = useState<HealthStatus | null>(null);
 
-  const token = localStorage.getItem("token") || "";
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -64,97 +64,68 @@ const Dashboard = () => {
 
   const fetchHealthStatus = async () => {
     try {
-      const rest = await fetch("http://localhost:8080/api/user/profile", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      if (!rest.ok) throw new Error("Failed to fetch profile");
-      const user = await rest.json();
+      const profileResponse = await axiosInstance.get("/user/profile");
+      const user = profileResponse.data;
 
       // Set profile picture if available
       if (user.profilePicture) {
         setProfilePicture(user.profilePicture);
       }
 
-      const username = user.email; // Adjust if backend expects a space or different format
-      const res = await fetch(
-        `http://localhost:8080/api/health/status?username=${username}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
+      const username = user.email;
+      const healthResponse = await axiosInstance.get(
+        `/health/status?username=${username}`
       );
-      if (res.status === 401 || res.status === 403) {
-        handleLogout();
-        return;
-      }
-      const data = await res.json();
-      setHealthStatus(data);
-    } catch (err) {
+      setHealthStatus(healthResponse.data);
+    } catch (err: any) {
       console.error("Failed to fetch health status", err);
+      if (err.response?.status === 401 || err.response?.status === 403) {
+        handleLogout();
+      }
     }
   };
 
   const fetchWeightData = async () => {
     try {
-      const response = await fetch("http://localhost:8080/api/weight", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      if (response.status === 401 || response.status === 403) {
-        handleLogout();
-        return;
-      }
-      const data = await response.json();
-      setWeightData(data);
-    } catch (error) {
+      const response = await axiosInstance.get("/weight");
+      setWeightData(response.data);
+    } catch (error: any) {
       console.error("Failed to fetch weight data", error);
+      if (error.response?.status === 401 || error.response?.status === 403) {
+        handleLogout();
+      }
     }
   };
 
   const fetchLatestMetrics = async () => {
     try {
-      const res = await fetch("http://localhost:8080/api/metrics/latest", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      if (res.status === 401) {
-        handleLogout();
-        return;
-      }
-      const data = await res.json();
-      setMetrics(data);
-    } catch (err) {
+      const response = await axiosInstance.get("/metrics/latest");
+      setMetrics(response.data);
+    } catch (err: any) {
       console.error("Failed to fetch metrics", err);
+      if (err.response?.status === 401) {
+        handleLogout();
+      }
     }
   };
 
   const fetchMetricTrends = async () => {
     try {
-      const res = await fetch("http://localhost:8080/api/metrics/trends", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      if (res.status === 401) {
-        handleLogout();
-        return;
-      }
-      const data = await res.json();
-      setMetricTrends(data);
-    } catch (err) {
+      const response = await axiosInstance.get("/metrics/trends");
+      setMetricTrends(response.data);
+    } catch (err: any) {
       console.error("Failed to fetch metric trends", err);
+      if (err.response?.status === 401) {
+        handleLogout();
+      }
     }
   };
 
   const logWeight = async () => {
     if (!newWeight) return;
     try {
-      await fetch("http://localhost:8080/api/weight", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ weightInKg: parseFloat(newWeight) }),
+      await axiosInstance.post("/weight", {
+        weightInKg: parseFloat(newWeight),
       });
       setNewWeight("");
       fetchWeightData();
@@ -351,7 +322,7 @@ const Dashboard = () => {
                 Here's your health overview for today
               </p>
             </div>
-          </div>
+        </div>
 
           {/* Weight Trend Card */}
           <div className="card-modern mb-6">
@@ -579,14 +550,14 @@ const Dashboard = () => {
             </h2>
             <div className="flex flex-col sm:flex-row gap-3">
               <div className="flex-1 relative">
-                <input
-                  type="number"
-                  step="0.1"
-                  value={newWeight}
-                  onChange={(e) => setNewWeight(e.target.value)}
+              <input
+                type="number"
+                step="0.1"
+                value={newWeight}
+                onChange={(e) => setNewWeight(e.target.value)}
                   placeholder="Enter weight in kg"
                   className="inputClass w-full"
-                />
+              />
                 <span className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 font-medium">
                   kg
                 </span>
@@ -603,7 +574,7 @@ const Dashboard = () => {
                 Last logged: {new Date(weightData[weightData.length - 1].logDate).toLocaleDateString()}
               </p>
             )}
-          </div>
+        </div>
       </div>
     </div>
   );

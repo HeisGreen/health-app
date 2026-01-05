@@ -73,8 +73,13 @@ public class WebSecurity {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:5173", "https://health-app-ivory-one.vercel.app/")); // Allow requests from this origin
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE")); // Allow these HTTP methods
+        // Allow requests from localhost (development) and Vercel (production)
+        // Railway domain will be added dynamically if needed
+        configuration.setAllowedOrigins(Arrays.asList(
+            "http://localhost:5173",
+            "https://health-app-ivory-one.vercel.app"
+        ));
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS")); // Allow these HTTP methods
         configuration.setAllowedHeaders(Arrays.asList("*")); // Allow all headers
         configuration.setAllowCredentials(true); // Allow cookies and credentials
 
