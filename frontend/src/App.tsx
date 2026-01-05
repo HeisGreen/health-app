@@ -100,58 +100,66 @@ function App() {
     setProfilePicture(""); // Clear profile picture
     window.location.href = "/login"; // Redirect to login page
   };
+  // Check if current path is a public landing/auth page
+  const isPublicPage = window.location.pathname === "/" || window.location.pathname === "/login";
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-teal-50">
       <Router>
-        <Navbar
-          isLoggedIn={isLoggedIn}
-          firstName={firstName}
-          lastName={lastName}
-          profilePicture={profilePicture}
-          handleLogout={handleLogout}
-        />
+        {/* Only show Navbar when logged in or on protected routes */}
+        {isLoggedIn && (
+          <Navbar
+            isLoggedIn={isLoggedIn}
+            firstName={firstName}
+            lastName={lastName}
+            profilePicture={profilePicture}
+            handleLogout={handleLogout}
+          />
+        )}
 
-        <div className="min-h-screen flex items-center justify-center">
-          <Routes>
-            <Route
-              path="/"
-              element={
-                <Signup
-                  setIsLoggedIn={setIsLoggedIn}
-                  setFirstName={setFirstName}
-                  setLastName={setLastName}
-                />
-              }
-            />
-            <Route
-              path="/login"
-              element={
-                <Login
-                  setIsLoggedIn={setIsLoggedIn}
-                  setFirstName={setFirstName}
-                  setLastName={setLastName}
-                />
-              }
-            />
-            <Route element={<PrivateRoute />}>
-              <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/bmr" element={<Bmr />} />
-              <Route path="/bmi" element={<Bmi />} />
-              <Route path="/eer" element={<Eer />} />
-              <Route path="/tips" element={<Tips />} />
-              <Route path="/tracker" element={<Tracker />} />
-              <Route path="/planner" element={<Planner />} />
-              <Route path="/forum" element={<Forum />} />
-              <Route path="/profile" element={<Profile />} />
-              <Route path="/settings" element={<Settings />} />
-              <Route path="/bmiUw" element={<BmiUw />} />
-              <Route path="/bmrSuccess" element={<BmrSuccess />} />
-              <Route path="/eerSuccess" element={<EerSuccess />} />
-              {/* Add other protected routes here */}
-            </Route>
-          </Routes>
-        </div>
-        <Footer />
+        <Routes>
+          {/* Public routes - full page layout */}
+          <Route
+            path="/"
+            element={
+              <Signup
+                setIsLoggedIn={setIsLoggedIn}
+                setFirstName={setFirstName}
+                setLastName={setLastName}
+              />
+            }
+          />
+          <Route
+            path="/login"
+            element={
+              <Login
+                setIsLoggedIn={setIsLoggedIn}
+                setFirstName={setFirstName}
+                setLastName={setLastName}
+              />
+            }
+          />
+          
+          {/* Protected routes with standard layout */}
+          <Route element={<PrivateRoute />}>
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/bmr" element={<Bmr />} />
+            <Route path="/bmi" element={<Bmi />} />
+            <Route path="/eer" element={<Eer />} />
+            <Route path="/tips" element={<Tips />} />
+            <Route path="/tracker" element={<Tracker />} />
+            <Route path="/planner" element={<Planner />} />
+            <Route path="/forum" element={<Forum />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/settings" element={<Settings />} />
+            <Route path="/bmiUw" element={<BmiUw />} />
+            <Route path="/bmrSuccess" element={<BmrSuccess />} />
+            <Route path="/eerSuccess" element={<EerSuccess />} />
+          </Route>
+        </Routes>
+        
+        {/* Only show Footer on protected pages when logged in */}
+        {isLoggedIn && <Footer />}
       </Router>
     </div>
   );
