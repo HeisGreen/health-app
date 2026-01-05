@@ -67,21 +67,49 @@ public class UserServiceImpl implements UserService {
 
     public  UserResponse login(UserLoginRequest userLoginRequest){
         try {
+            String email = userLoginRequest.getEmail();
+            System.out.println("🔐 Login attempt for email: " + email);
+            
+            // Check if user exists first
+            boolean userExists = userRepository.existsByEmail(email);
+            System.out.println("👤 User exists: " + userExists);
+            
+            if (!userExists) {
+                System.out.println("❌ User not found with email: " + email);
+                return UserResponse.builder()
+                        .responseCode(AccountUtils.BAD_CREDENTIALS_CODE)
+                        .responseMessage("User not found. Please sign up first.")
+                        .build();
+            }
+            
             Authentication authentication = null;
             authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(userLoginRequest.getEmail(), userLoginRequest.getPassword())
+                    new UsernamePasswordAuthenticationToken(email, userLoginRequest.getPassword())
             );
+            
+            System.out.println("✅ Authentication successful for: " + email);
             return UserResponse.builder()
                     .responseCode("Logged in successfully")
                     .responseMessage(jwtTokenProvider.generateToken(authentication))
                     .build();
 
         }catch (BadCredentialsException e){
+            System.out.println("❌ Bad credentials exception for: " + userLoginRequest.getEmail());
+            System.out.println("Exception message: " + e.getMessage());
             return UserResponse.builder()
                     .responseCode(AccountUtils.BAD_CREDENTIALS_CODE)
                     .responseMessage(AccountUtils.BAD_CREDENTIALS_MESSAGE)
                     .build();
+        }catch (UsernameNotFoundException e){
+            System.out.println("❌ Username not found: " + userLoginRequest.getEmail());
+            return UserResponse.builder()
+                    .responseCode(AccountUtils.BAD_CREDENTIALS_CODE)
+                    .responseMessage("User not found. Please sign up first.")
+                    .build();
         }catch (Exception e){
+            System.out.println("❌ Login error: " + e.getClass().getName());
+            System.out.println("Error message: " + e.getMessage());
+            e.printStackTrace();
             return UserResponse.builder()
                     .responseCode("Login failed")
                     .responseMessage("An error occured during login, Please try again")
