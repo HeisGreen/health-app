@@ -16,9 +16,6 @@ const Signup = ({ setIsLoggedIn, setFirstName, setLastName }: SignupProps) => {
     email: "",
     password: "",
     gender: "",
-    department: "",
-    address: "",
-    phoneNumber: "",
   });
 
   const handleChange = (
@@ -151,71 +148,21 @@ const Signup = ({ setIsLoggedIn, setFirstName, setLastName }: SignupProps) => {
               />
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  Gender
-                </label>
-                <select
-                  name="gender"
-                  className="inputClass"
-                  value={formData.gender}
-                  onChange={handleChange}
-                  required
-                >
-                  <option value="">Select Gender</option>
-                  <option value="Female">Female</option>
-                  <option value="Male">Male</option>
-                </select>
-              </div>
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  Department
-                </label>
-                <select
-                  name="department"
-                  className="inputClass"
-                  value={formData.department}
-                  onChange={handleChange}
-                  required
-                >
-                  <option value="">Select Department</option>
-                  <option value="HR">HR</option>
-                  <option value="Backend Engineer">Backend Engineer</option>
-                  <option value="Frontend Engineer">Frontend Engineer</option>
-                  <option value="UI/UX Designer">UI/UX Designer</option>
-                </select>
-              </div>
-            </div>
-
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-2">
-                Address
+                Gender
               </label>
-              <input
-                type="text"
-                name="address"
-                placeholder="Enter your address"
+              <select
+                name="gender"
                 className="inputClass"
-                value={formData.address}
+                value={formData.gender}
                 onChange={handleChange}
                 required
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
-                Phone Number
-              </label>
-              <input
-                type="text"
-                name="phoneNumber"
-                placeholder="Enter phone number"
-                className="inputClass"
-                value={formData.phoneNumber}
-                onChange={handleChange}
-                required
-              />
+              >
+                <option value="">Select Gender</option>
+                <option value="Female">Female</option>
+                <option value="Male">Male</option>
+              </select>
             </div>
 
             <button

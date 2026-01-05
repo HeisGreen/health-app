@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Sidebar from "./Sidebar";
-import { FaCamera, FaSave, FaUser, FaEnvelope, FaPhone, FaVenusMars, FaBuilding, FaMapMarkerAlt, FaCheckCircle } from "react-icons/fa";
+import { FaCamera, FaSave, FaUser, FaEnvelope, FaVenusMars, FaCheckCircle } from "react-icons/fa";
 import { motion } from "framer-motion";
 import axiosInstance from "../services/axiosInstance";
 import { uploadProfilePicture } from "../services/imageUpload";
@@ -10,10 +10,7 @@ export const Profile = () => {
     firstName: "",
     lastName: "",
     email: "",
-    phoneNumber: "",
     gender: "",
-    department: "",
-    address: "",
     profilePicture: "",
   });
   const [profilePic, setProfilePic] = useState<any>(null);
@@ -50,10 +47,7 @@ export const Profile = () => {
         firstName: data.firstName || "",
         lastName: data.lastName || "",
         email: data.email || "",
-        phoneNumber: data.phoneNumber || "",
         gender: data.gender || "",
-        department: data.department || "",
-        address: data.address || "",
         profilePicture: data.profilePicture || "",
       });
       setProfilePic(data.profilePicture || null);
@@ -164,10 +158,7 @@ export const Profile = () => {
         firstName: formData.firstName,
         lastName: formData.lastName,
         email: formData.email,
-        phoneNumber: formData.phoneNumber,
         gender: formData.gender,
-        department: formData.department,
-        address: formData.address,
         profilePicture: formData.profilePicture,
       });
       
@@ -289,12 +280,6 @@ export const Profile = () => {
                   {formData.firstName} {formData.lastName}
                 </h2>
                 <p className="text-gray-500 text-sm mb-4">{formData.email}</p>
-                {formData.department && (
-                  <div className="flex items-center gap-2 text-sm text-gray-600 bg-gray-50 px-4 py-2 rounded-full">
-                    <FaBuilding className="text-teal-600" />
-                    <span>{formData.department}</span>
-                  </div>
-                )}
               </div>
             </motion.div>
 
@@ -363,76 +348,23 @@ export const Profile = () => {
                   </p>
                 </div>
 
-                {/* Phone Number */}
+                {/* Gender */}
                 <div>
                   <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-2">
-                    <FaPhone className="text-teal-600" />
-                    Phone Number
+                    <FaVenusMars className="text-teal-600" />
+                    Gender
                   </label>
-                  <input
-                    type="tel"
-                    name="phoneNumber"
+                  <select
+                    name="gender"
                     className="inputClass"
-                    value={formData.phoneNumber}
+                    value={formData.gender}
                     onChange={handleChange}
-                    placeholder="Enter phone number"
-                  />
-                </div>
-
-                {/* Gender and Department */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                  <div>
-                    <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-2">
-                      <FaVenusMars className="text-teal-600" />
-                      Gender
-                    </label>
-                    <select
-                      name="gender"
-                      className="inputClass"
-                      value={formData.gender}
-                      onChange={handleChange}
-                    >
-                      <option value="">Select Gender</option>
-                      <option value="Male">Male</option>
-                      <option value="Female">Female</option>
-                      <option value="Other">Other</option>
-                    </select>
-                  </div>
-
-                  <div>
-                    <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-2">
-                      <FaBuilding className="text-teal-600" />
-                      Department
-                    </label>
-                    <select
-                      name="department"
-                      className="inputClass"
-                      value={formData.department}
-                      onChange={handleChange}
-                    >
-                      <option value="">Select Department</option>
-                      <option value="HR">HR</option>
-                      <option value="Backend Engineer">Backend Engineer</option>
-                      <option value="Frontend Engineer">Frontend Engineer</option>
-                      <option value="UI/UX Designer">UI/UX Designer</option>
-                    </select>
-                  </div>
-                </div>
-
-                {/* Address */}
-                <div>
-                  <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-2">
-                    <FaMapMarkerAlt className="text-teal-600" />
-                    Address
-                  </label>
-                  <input
-                    type="text"
-                    name="address"
-                    className="inputClass"
-                    value={formData.address}
-                    onChange={handleChange}
-                    placeholder="Enter your address"
-                  />
+                  >
+                    <option value="">Select Gender</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
+                  </select>
                 </div>
 
                 {/* Save Button */}

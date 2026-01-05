@@ -12,6 +12,7 @@ interface LoginProps {
 const Login = ({ setIsLoggedIn, setFirstName, setLastName }: LoginProps) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleLogin = async () => {
@@ -19,6 +20,7 @@ const Login = ({ setIsLoggedIn, setFirstName, setLastName }: LoginProps) => {
       alert("Please fill in all fields.");
       return;
     }
+    setIsLoading(true);
     try {
       console.log("🔐 Attempting login for:", email);
       console.log("🌐 API Base URL:", axiosInstance.defaults.baseURL);
@@ -36,6 +38,7 @@ const Login = ({ setIsLoggedIn, setFirstName, setLastName }: LoginProps) => {
       if (response.data.responseCode === "800" || response.data.responseCode === 800) {
         console.error("❌ Bad credentials - responseCode:", response.data.responseCode);
         alert(response.data.responseMessage || "Incorrect email or password");
+        setIsLoading(false);
         return;
       }
       
@@ -47,6 +50,7 @@ const Login = ({ setIsLoggedIn, setFirstName, setLastName }: LoginProps) => {
         if (!token || token === "undefined" || token === "null") {
           console.error("❌ No token in response");
           alert("Login failed: No token received");
+          setIsLoading(false);
           return;
         }
         
@@ -77,6 +81,7 @@ const Login = ({ setIsLoggedIn, setFirstName, setLastName }: LoginProps) => {
       } else {
         console.error("❌ Unexpected response code:", response.data.responseCode);
         alert(response.data.responseMessage || "Login failed. Please try again.");
+        setIsLoading(false);
       }
     } catch (err: any) {
       console.error("❌ Login error:", err);
@@ -90,6 +95,7 @@ const Login = ({ setIsLoggedIn, setFirstName, setLastName }: LoginProps) => {
       // Check if it's a network error
       if (!err.response) {
         alert("Network error: Could not reach the server. Please check your connection.");
+        setIsLoading(false);
         return;
       }
       
@@ -99,6 +105,8 @@ const Login = ({ setIsLoggedIn, setFirstName, setLastName }: LoginProps) => {
       } else {
         alert(err.response?.data?.responseMessage || err.message || "Login failed. Please try again.");
       }
+    } finally {
+      setIsLoading(false);
     }
   };
   return (
@@ -191,12 +199,41 @@ const Login = ({ setIsLoggedIn, setFirstName, setLastName }: LoginProps) => {
             </div>
 
             <motion.button
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
+              whileHover={isLoading ? {} : { scale: 1.02 }}
+              whileTap={isLoading ? {} : { scale: 0.98 }}
               onClick={handleLogin}
-              className="btn-primary w-full"
+              disabled={isLoading}
+              className={`btn-primary w-full ${
+                isLoading ? "opacity-50 cursor-not-allowed" : ""
+              }`}
             >
-              Sign In
+              {isLoading ? (
+                <span className="flex items-center justify-center">
+                  <svg
+                    className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    ></circle>
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                    ></path>
+                  </svg>
+                  Signing In...
+                </span>
+              ) : (
+                "Sign In"
+              )}
             </motion.button>
           </motion.form>
 
