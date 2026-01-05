@@ -20,36 +20,85 @@ const Login = ({ setIsLoggedIn, setFirstName, setLastName }: LoginProps) => {
       return;
     }
     try {
+      console.log("🔐 Attempting login for:", email);
+      console.log("🌐 API Base URL:", axiosInstance.defaults.baseURL);
+      
       const response = await axiosInstance.post("/user/login", {
         email,
         password,
       });
-      const token = String(response.data.responseMessage);
-      localStorage.setItem("token", token);
-
-      const userDetailsResponse = await axiosInstance.get(
-        "/user/getUsernames",
-        {
-          params: { email },
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+      
+      console.log("📥 Login response:", response.data);
+      
+      // Check if login was successful
+      // Backend returns responseCode: "800" for bad credentials
+      // Backend returns responseCode: "Logged in successfully" for success
+      if (response.data.responseCode === "800" || response.data.responseCode === 800) {
+        console.error("❌ Bad credentials - responseCode:", response.data.responseCode);
+        alert(response.data.responseMessage || "Incorrect email or password");
+        return;
+      }
+      
+      // Check if responseCode indicates success
+      if (response.data.responseCode === "Logged in successfully" || response.data.responseMessage) {
+        const token = String(response.data.responseMessage);
+        console.log("✅ Login successful, token received");
+        
+        if (!token || token === "undefined" || token === "null") {
+          console.error("❌ No token in response");
+          alert("Login failed: No token received");
+          return;
         }
-      );
+        
+        localStorage.setItem("token", token);
 
-      const firstName = userDetailsResponse.data.firstName;
-      const lastName = userDetailsResponse.data.lastName;
+        // Get user details
+        const userDetailsResponse = await axiosInstance.get(
+          "/user/getUsernames",
+          {
+            params: { email },
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
-      localStorage.setItem("firstName", firstName);
-      localStorage.setItem("lastName", lastName);
+        const firstName = userDetailsResponse.data.firstName;
+        const lastName = userDetailsResponse.data.lastName;
 
-      setIsLoggedIn(true);
-      setFirstName(firstName);
-      setLastName(lastName);
+        localStorage.setItem("firstName", firstName);
+        localStorage.setItem("lastName", lastName);
 
-      navigate("/dashboard");
-    } catch (err) {
-      alert("Invalid email or password");
+        setIsLoggedIn(true);
+        setFirstName(firstName);
+        setLastName(lastName);
+
+        navigate("/dashboard");
+      } else {
+        console.error("❌ Unexpected response code:", response.data.responseCode);
+        alert(response.data.responseMessage || "Login failed. Please try again.");
+      }
+    } catch (err: any) {
+      console.error("❌ Login error:", err);
+      console.error("Error details:", {
+        message: err.message,
+        response: err.response?.data,
+        status: err.response?.status,
+        statusText: err.response?.statusText,
+      });
+      
+      // Check if it's a network error
+      if (!err.response) {
+        alert("Network error: Could not reach the server. Please check your connection.");
+        return;
+      }
+      
+      // Check if backend returned an error response
+      if (err.response?.data?.responseCode === "800" || err.response?.data?.responseCode === 800) {
+        alert(err.response.data.responseMessage || "Incorrect email or password");
+      } else {
+        alert(err.response?.data?.responseMessage || err.message || "Login failed. Please try again.");
+      }
     }
   };
   return (

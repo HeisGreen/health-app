@@ -79,7 +79,7 @@ public class WebSecurity {
         configuration.setAllowedOrigins(Arrays.asList(
             "http://localhost:5173",
             "https://health-app-ivory-one.vercel.app",
-                "desirable-heart-production.up.railway.app"
+            "https://desirable-heart-production.up.railway.app"
         ));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS")); // Allow these HTTP methods
         configuration.setAllowedHeaders(Arrays.asList("*")); // Allow all headers
