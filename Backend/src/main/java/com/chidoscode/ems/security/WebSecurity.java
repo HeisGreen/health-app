@@ -58,6 +58,7 @@ public class WebSecurity {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource())) // Enable CORS
                 .authorizeHttpRequests(authorize ->
                         authorize
+                                .requestMatchers(HttpMethod.GET, "/api/health").permitAll() // Health check endpoint
                                 .requestMatchers(HttpMethod.POST, "/api/user/signup").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/api/user/login").permitAll()// Public POST endpoint
                                 .anyRequest().authenticated()) // All other endpoints require authentication

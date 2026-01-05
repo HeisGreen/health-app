@@ -6,7 +6,7 @@
   },
   "deploy": {
     "startCommand": "java -jar target/ems-0.0.1-SNAPSHOT.jar",
-    "healthcheckPath": "/api/user/login",
+    "healthcheckPath": "/api/health",
     "healthcheckTimeout": 100,
     "restartPolicyType": "ON_FAILURE",
     "restartPolicyMaxRetries": 10
