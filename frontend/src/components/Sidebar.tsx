@@ -33,7 +33,7 @@ const Sidebar = () => {
     <>
       {/* Mobile Menu Button */}
       <button
-        className="md:hidden fixed top-24 left-4 z-50 p-3 bg-gradient-to-r from-teal-500 to-teal-600 text-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-200"
+        className="md:hidden fixed top-20 left-4 z-50 p-3 bg-gradient-to-r from-teal-500 to-teal-600 text-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-200"
         onClick={() => setIsMobileOpen(!isMobileOpen)}
         aria-label="Open menu"
       >
@@ -42,7 +42,7 @@ const Sidebar = () => {
 
       {/* Sidebar */}
       <div
-        className={`fixed top-0 left-0 h-screen bg-gradient-to-b from-teal-600 to-teal-700 text-white shadow-2xl transition-all duration-300 z-40 ${
+        className={`fixed md:top-0 top-16 left-0 h-[calc(100vh-4rem)] md:h-screen bg-gradient-to-b from-teal-600 to-teal-700 text-white shadow-2xl transition-all duration-300 z-40 ${
           isMobileOpen ? "w-64" : isCollapsed ? "w-20" : "w-64"
         } ${
           isMobileOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"

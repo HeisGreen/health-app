@@ -21,7 +21,7 @@ const Navbar = ({
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-50 w-full bg-white/80 backdrop-blur-md shadow-sm border-b border-gray-200">
+    <header className="sticky top-0 z-[60] w-full bg-white/80 backdrop-blur-md shadow-sm border-b border-gray-200">
       <div className="mx-auto flex w-full h-16 md:h-20 items-center justify-between px-4 md:px-6 lg:px-8">
         {/* Logo Section */}
         <Link

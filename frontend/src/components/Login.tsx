@@ -107,6 +107,8 @@ const Login = ({ setIsLoggedIn, setFirstName, setLastName }: LoginProps) => {
         autoPlay
         loop
         muted
+        playsInline
+        preload="auto"
         className="absolute top-0 left-0 w-full h-full object-cover opacity-30"
       >
         <source src="fitvid.mp4" type="video/mp4" />

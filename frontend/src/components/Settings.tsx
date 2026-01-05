@@ -103,7 +103,7 @@ const Settings = () => {
       </div>
 
       {/* Main Content - Offset for sidebar */}
-      <div className="md:ml-64 min-w-0 p-6 sm:p-10">
+      <div className="md:ml-64 min-w-0 p-6 sm:p-10 pt-20 md:pt-10">
         <div className="max-w-4xl mx-auto">
           {/* Header */}
           <motion.div

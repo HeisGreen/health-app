@@ -63,6 +63,8 @@ const Signup = ({ setIsLoggedIn, setFirstName, setLastName }: SignupProps) => {
         autoPlay
         loop
         muted
+        playsInline
+        preload="auto"
       />
       <div className="absolute inset-0 bg-gradient-to-br from-teal-900/40 via-blue-900/30 to-teal-800/40"></div>
 

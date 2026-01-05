@@ -75,13 +75,11 @@ const Bmr = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-teal-50">
-      {/* Sidebar - Always fixed on left */}
-      <div className="hidden md:block fixed left-0 top-0 h-screen w-64 z-30">
-        <Sidebar />
-      </div>
+      {/* Sidebar - Always visible, positioned below header on mobile */}
+      <Sidebar />
 
       {/* Main Content - Offset for sidebar */}
-      <div className="md:ml-64 min-h-screen p-4 md:p-6 lg:p-8">
+      <div className="md:ml-64 min-h-screen p-4 md:p-6 lg:p-8 pt-20 md:pt-6">
         <div className="max-w-6xl mx-auto">
           {/* Header */}
           <motion.div

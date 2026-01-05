@@ -61,13 +61,11 @@ const Tips = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-teal-50">
-      {/* Sidebar - Always fixed on left */}
-      <div className="hidden md:block fixed left-0 top-0 h-screen w-64 z-30">
-        <Sidebar />
-      </div>
+      {/* Sidebar - Always visible, positioned below header on mobile */}
+      <Sidebar />
 
       {/* Main Content - Offset for sidebar */}
-      <div className="md:ml-64 min-w-0 p-6">
+      <div className="md:ml-64 min-w-0 p-6 pt-20 md:pt-6">
         <h1 className="text-3xl font-bold text-orange-500 mb-4 italic text-center">
           Daily Health Tips 💡
         </h1>
