@@ -1,9 +1,21 @@
 import axios from 'axios';
 import { getApiUrl } from '../utils/apiConfig';
 
+// Get API URL and ensure it's valid
+let apiUrl: string;
+try {
+  apiUrl = getApiUrl();
+  console.log('Axios baseURL set to:', apiUrl);
+} catch (error) {
+  console.error('Failed to get API URL:', error);
+  // Fallback to localhost
+  apiUrl = 'http://localhost:8080/api';
+  console.warn('Using fallback API URL:', apiUrl);
+}
+
 // Create an Axios instance with a base URL
 const axiosInstance = axios.create({
-  baseURL: getApiUrl(),
+  baseURL: apiUrl,
 });
 
 // Add a request interceptor to automatically add token
