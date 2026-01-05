@@ -60,14 +60,14 @@ const Tips = () => {
       : healthTips.filter((section) => section.category === selectedCategory);
 
   return (
-    <div className="flex flex-col lg:flex-row w-full min-h-screen ">
-      {/* Sidebar */}
-      <div className="lg:w-1/5.5">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-teal-50">
+      {/* Sidebar - Always fixed on left */}
+      <div className="hidden md:block fixed left-0 top-0 h-screen w-64 z-30">
         <Sidebar />
       </div>
 
-      {/* Main Content */}
-      <div className="flex-1 p-6">
+      {/* Main Content - Offset for sidebar */}
+      <div className="md:ml-64 min-w-0 p-6">
         <h1 className="text-3xl font-bold text-orange-500 mb-4 italic text-center">
           Daily Health Tips 💡
         </h1>

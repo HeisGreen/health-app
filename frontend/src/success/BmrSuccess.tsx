@@ -2,6 +2,7 @@ import React from "react";
 import { BsLightbulb } from "react-icons/bs";
 import { FaArrowRightLong } from "react-icons/fa6";
 import { Link, useLocation } from "react-router-dom";
+import { motion } from "framer-motion";
 
 const BmrSuccess = () => {
   const location = useLocation();
@@ -286,68 +287,86 @@ const BmrSuccess = () => {
   };
 
   return (
-    <div
-      className={
-        "flex flex-col gap-4 w-full items-center justify-center min-h-screen text-center"
-      }
-    >
-      <p className={"text-[#F8E9A1] font-bold text-7xl neon-glow"}>
+    <div className="flex flex-col gap-6 w-full items-center justify-center min-h-screen text-center p-4 bg-gradient-to-br from-slate-50 via-blue-50 to-teal-50">
+      <motion.div
+        initial={{ scale: 0.8, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ duration: 0.5 }}
+        className="text-5xl md:text-6xl font-bold mb-4"
+      >
         {getStatus(bmrResult)}
-      </p>
-      <h1 className={"text-8xl sm:text-5xl font-bold text-teal-800 flex"}>
-        Your calorie intake per day should be : <strong>{bmrResult}</strong>{" "}
-        kcal/day
-      </h1>
-      <div className="flex w-[1400px] space-x-5">
-        <div className="w-[650px] h-[350px] flex flex-col  items-center  bg-teal-800 rounded-lg border-2 border-white text-white shadow-lg shadow-lime-800/6">
-          <h3 className="text-3xl italic text-[#F8E9A1] flex items-center">
-            What does this mean
+      </motion.div>
+
+      <motion.h1
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.2 }}
+        className="text-2xl sm:text-3xl md:text-4xl font-bold gradient-text mb-8 max-w-4xl"
+      >
+        Your calorie intake per day should be:{" "}
+        <span className="text-teal-600">{bmrResult?.toFixed(0)}</span> kcal/day
+      </motion.h1>
+
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-7xl w-full mb-8">
+        <motion.div
+          initial={{ opacity: 0, x: -30 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 0.3 }}
+          className="card-modern"
+        >
+          <div className="flex items-center justify-center mb-4">
             <img
               src="q-mark.png"
               alt="question-mark-icon"
-              className="w-[50px] h-[40px] mb-2"
+              className="w-12 h-12 mr-2"
             />
-          </h3>{" "}
-          <p className={"text-white font-italic bold space-y-5 m-5"}>
+            <h3 className="text-xl font-bold text-gray-800">What does this mean?</h3>
+          </div>
+          <div className="text-gray-700 space-y-3 text-left">
             {getWhatDoesThisMean(bmrResult)}
-          </p>
-        </div>
-        <div className="w-[650px] h-[350px] flex flex-col  items-center bg-teal-800 rounded-lg border-2 border-white text-white shadow-lg shadow-lime-800/6">
-          <h3 className="text-3xl italic text-[#F8E9A1] flex items-center">
-            what can i do
-            <img
-              src="bulb.png"
-              alt="bulb-icon"
-              className="w-[50px] h-[40px] mb-2"
-            />
-          </h3>{" "}
-          <p className={"text-white font-italic bold space-y-5 m-5"}>
+          </div>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4 }}
+          className="card-modern"
+        >
+          <div className="flex items-center justify-center mb-4">
+            <img src="bulb.png" alt="bulb-icon" className="w-12 h-12 mr-2" />
+            <h3 className="text-xl font-bold text-gray-800">What can I do?</h3>
+          </div>
+          <div className="text-gray-700 space-y-3 text-left">
             {getWhatCan(bmrResult)}
-          </p>
-        </div>
-        <div className="w-[650px] h-[350px] flex flex-col  items-center  bg-teal-800 rounded-lg border-2 border-white text-white shadow-lg shadow-lime-800/6">
-          <h3 className="text-3xl italic text-[#F8E9A1] flex items-center ">
-            Why does this matter{" "}
-            <img
-              src="why-icon.png"
-              alt="why-icon"
-              className="w-[50px] h-[40px] mb-2"
-            />
-          </h3>{" "}
-          <p className={"text-white font-italic bold space-y-5 m-5"}>
+          </div>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, x: 30 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 0.5 }}
+          className="card-modern"
+        >
+          <div className="flex items-center justify-center mb-4">
+            <img src="why-icon.png" alt="why-icon" className="w-12 h-12 mr-2" />
+            <h3 className="text-xl font-bold text-gray-800">Why does this matter?</h3>
+          </div>
+          <div className="text-gray-700 space-y-3 text-left">
             {getWhyDoesThisMatter(bmrResult)}
-          </p>
-        </div>
+          </div>
+        </motion.div>
       </div>
-      <Link
-        to="/bmr"
-        className={
-          " flex bg-[#4F46E5] items-center italic justify-center gap-2 text-white px-3.5 py-2.5 rounded-md font-semibold"
-        }
+
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.6 }}
       >
-        {" "}
-        Back to Bmr page <FaArrowRightLong />{" "}
-      </Link>
+        <Link to="/bmr" className="btn-primary inline-flex items-center gap-2">
+          Back to BMR Calculator <FaArrowRightLong />
+        </Link>
+      </motion.div>
     </div>
   );
 };

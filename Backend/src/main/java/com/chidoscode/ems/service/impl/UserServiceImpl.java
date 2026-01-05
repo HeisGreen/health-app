@@ -139,15 +139,17 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserProfileDto getUserProfile(String email) {
         User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
 
-        return new UserProfileDto().builder()
-                .firstName(user.getFirstName())
-                .lastName(user.getLastName())
-                .email(user.getEmail())
-                .gender(user.getGender())
-                .phoneNumber(user.getPhoneNumber())
-                .profilePicture(user.getProfilePicture())
+        return UserProfileDto.builder()
+                .firstName(user.getFirstName() != null ? user.getFirstName() : "")
+                .lastName(user.getLastName() != null ? user.getLastName() : "")
+                .email(user.getEmail() != null ? user.getEmail() : "")
+                .gender(user.getGender() != null ? user.getGender() : "")
+                .department(user.getDepartment() != null ? user.getDepartment() : "")
+                .address(user.getAddress() != null ? user.getAddress() : "")
+                .phoneNumber(user.getPhoneNumber() != null ? user.getPhoneNumber() : "")
+                .profilePicture(user.getProfilePicture() != null ? user.getProfilePicture() : "")
                 .build();
 }
 
@@ -158,6 +160,8 @@ public class UserServiceImpl implements UserService {
         user.setFirstName(userProfileDto.getFirstName());
         user.setLastName(userProfileDto.getLastName());
         user.setGender(userProfileDto.getGender());
+        user.setDepartment(userProfileDto.getDepartment());
+        user.setAddress(userProfileDto.getAddress());
         user.setPhoneNumber(userProfileDto.getPhoneNumber());
         user.setProfilePicture(userProfileDto.getProfilePicture());
 

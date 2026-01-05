@@ -4,11 +4,11 @@ import com.chidoscode.ems.dto.*;
 import com.chidoscode.ems.service.impl.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
-import java.security.Principal;
-
-@CrossOrigin(origins = {"http://localhost:5173", "hhttps://health-app-ivory-one.vercel.app/"})
+@CrossOrigin(origins = {"http://localhost:5173", "https://health-app-ivory-one.vercel.app/"})
 @RestController
 @RequestMapping("/api/user")
 public class UserController {
@@ -42,17 +42,23 @@ public class UserController {
     }
 
     @GetMapping("/profile")
-    public ResponseEntity<UserProfileDto> getProfile(Principal principal) {
-        String email = principal.getName(); // Extracted from JWT
+    public ResponseEntity<UserProfileDto> getProfile(@AuthenticationPrincipal UserDetails userDetails) {
+        if (userDetails == null) {
+            throw new RuntimeException("User not authenticated");
+        }
+        String email = userDetails.getUsername(); // Extracted from JWT
         UserProfileDto profile = userService.getUserProfile(email);
         return ResponseEntity.ok(profile);
     }
 
     @PutMapping("/profile")
-    public ResponseEntity<String> updateProfile(@RequestBody UserProfileDto profileDTO, Principal principal) {
-        String email = principal.getName(); // Extracted from JWT
-        userService.updateUserProfile(email, profileDTO);
-        return ResponseEntity.ok("Profile updated successfully");
+    public ResponseEntity<UserResponse> updateProfile(@RequestBody UserProfileDto profileDTO, @AuthenticationPrincipal UserDetails userDetails) {
+        if (userDetails == null) {
+            throw new RuntimeException("User not authenticated");
+        }
+        String email = userDetails.getUsername(); // Extracted from JWT
+        UserResponse response = userService.updateUserProfile(email, profileDTO);
+        return ResponseEntity.ok(response);
     }
 }
 

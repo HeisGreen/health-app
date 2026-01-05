@@ -53,83 +53,118 @@ const Login = ({ setIsLoggedIn, setFirstName, setLastName }: LoginProps) => {
     }
   };
   return (
-    <div className="relative w-full h-screen flex items-center justify-center">
+    <div className="relative w-full min-h-screen flex items-center justify-center overflow-hidden">
       <video
         autoPlay
         loop
         muted
-        className="absolute top-0 left-0 w-full h-full object-cover"
+        className="absolute top-0 left-0 w-full h-full object-cover opacity-30"
       >
         <source src="fitvid.mp4" type="video/mp4" />
       </video>
-      <div className=" relative flex flex-col justify-center items-center min-h-screen">
-        <h1 className="font-bold sm:text-4xl text-2xl mt-9 items-center justify-center text-white neon-glow">
-          Log in to your account
-        </h1>
+      <div className="absolute inset-0 bg-gradient-to-br from-teal-900/40 via-blue-900/30 to-teal-800/40"></div>
+      
+      <div className="relative z-10 flex flex-col justify-center items-center min-h-screen w-full px-4 py-8">
         <motion.div
-          initial={{ opacity: 0, scale: 0.8 }}
+          initial={{ opacity: 0, y: -30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="mb-8"
+        >
+          <h1 className="font-bold text-3xl sm:text-4xl md:text-5xl text-center gradient-text mb-2">
+            Welcome Back
+          </h1>
+          <p className="text-gray-600 text-center text-sm sm:text-base">
+            Log in to continue your health journey
+          </p>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.6, ease: "easeOut" }}
-          className="w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg p-6 flex flex-col justify-between items-center bg-teal-800 mt-7 rounded-lg border-2 border-white text-white shadow-lg shadow-lime-800/60"
+          transition={{ duration: 0.5, ease: "easeOut" }}
+          className="w-full max-w-md card-modern"
         >
           <motion.form
-            initial={{ opacity: 0, y: -30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3, duration: 0.5 }}
-            className="w-full space-y-4"
-          >
-            <input
-              type="email"
-              placeholder="Email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="inputClass"
-              required
-            />
-            <input
-              type="password"
-              value={password}
-              placeholder="Password"
-              onChange={(e) => setPassword(e.target.value)}
-              className="inputClass"
-              required
-            />
-          </motion.form>
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={handleLogin}
-            className="w-[200px] mt-4 py-2 bg-white text-teal-800 font-bold rounded hover:bg-orange-300 hover:text-white transition duration-300"
-          >
-            Login
-          </motion.button>
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5, duration: 0.5 }}
-            className="flex justify-between w-full mt-4"
-          >
-            <div className="flex items-center">
-              <input type="checkbox" id="terms" className="mr-2" />
-              <label htmlFor="terms" className="text-sm">
-                Remember me
-              </label>
-            </div>
-            <p className="text-sm text-blue-300 hover:text-orange-300 cursor-pointer">
-              <Link to="/forgot-password">Forgot password?</Link>
-            </p>
-          </motion.div>
-          <motion.h3
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ delay: 0.6, duration: 0.5 }}
-            className="w-full mt-6 py-4 border-t border-orange-400 text-sm text-center font-bold"
+            transition={{ delay: 0.2 }}
+            className="w-full space-y-5"
+            onSubmit={(e) => {
+              e.preventDefault();
+              handleLogin();
+            }}
           >
-            Don&apos;t have an account?
-            <Link to="/" className="text-orange-300 ml-1 underline">
-              Sign Up
-            </Link>
-          </motion.h3>
+            <div className="space-y-2">
+              <label className="block text-sm font-semibold text-gray-700">
+                Email Address
+              </label>
+              <input
+                type="email"
+                placeholder="Enter your email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="inputClass"
+                required
+              />
+            </div>
+
+            <div className="space-y-2">
+              <label className="block text-sm font-semibold text-gray-700">
+                Password
+              </label>
+              <input
+                type="password"
+                value={password}
+                placeholder="Enter your password"
+                onChange={(e) => setPassword(e.target.value)}
+                className="inputClass"
+                required
+              />
+            </div>
+
+            <div className="flex items-center justify-between text-sm">
+              <label className="flex items-center cursor-pointer">
+                <input
+                  type="checkbox"
+                  className="mr-2 w-4 h-4 text-teal-600 border-gray-300 rounded focus:ring-teal-500"
+                />
+                <span className="text-gray-600">Remember me</span>
+              </label>
+              <Link
+                to="/forgot-password"
+                className="text-teal-600 hover:text-teal-700 font-medium transition-colors"
+              >
+                Forgot password?
+              </Link>
+            </div>
+
+            <motion.button
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              onClick={handleLogin}
+              className="btn-primary w-full"
+            >
+              Sign In
+            </motion.button>
+          </motion.form>
+
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.4 }}
+            className="mt-6 pt-6 border-t border-gray-200"
+          >
+            <p className="text-center text-sm text-gray-600">
+              Don&apos;t have an account?{" "}
+              <Link
+                to="/"
+                className="text-teal-600 hover:text-teal-700 font-semibold transition-colors"
+              >
+                Sign Up
+              </Link>
+            </p>
+          </motion.div>
         </motion.div>
       </div>
     </div>

@@ -25,6 +25,7 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false); // Track login status
   const [firstName, setFirstName] = useState(""); // Track first name
   const [lastName, setLastName] = useState(""); // Track last name
+  const [profilePicture, setProfilePicture] = useState(""); // Track profile picture
   const [loading, setLoading] = useState(true); // Track loading state
 
   const isTokenValid = (token: string) => {
@@ -34,6 +35,28 @@ function App() {
       return decodedToken.exp > currentTime; // Check if token is expired
     } catch (err) {
       return false; // Token is invalid
+    }
+  };
+
+  // Fetch profile picture
+  const fetchProfilePicture = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) return;
+
+      const response = await fetch("http://localhost:8080/api/user/profile", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (response.ok) {
+        const data = await response.json();
+        if (data.profilePicture) {
+          setProfilePicture(data.profilePicture);
+        }
+      }
+    } catch (err) {
+      console.error("Failed to fetch profile picture:", err);
     }
   };
 
@@ -53,9 +76,19 @@ function App() {
       localStorage.removeItem("firstName");
       localStorage.removeItem("lastName");
       setIsLoggedIn(false);
+      setProfilePicture(""); // Clear profile picture
     }
     setLoading(false); // Mark loading as complete
   }, []); // Empty dependency array ensures this runs only once on mount
+
+  // Fetch profile picture when user is logged in
+  useEffect(() => {
+    if (isLoggedIn) {
+      fetchProfilePicture();
+    } else {
+      setProfilePicture(""); // Clear profile picture when logged out
+    }
+  }, [isLoggedIn]); // Fetch when login state changes
 
   // Show a loading spinner or nothing while checking localStorage
   if (loading) {
@@ -73,19 +106,21 @@ function App() {
     setIsLoggedIn(false); // Update state
     setFirstName(""); // Clear first name
     setLastName(""); // Clear last name
+    setProfilePicture(""); // Clear profile picture
     window.location.href = "/login"; // Redirect to login page
   };
   return (
-    <div className="bg-gradient-to-b from-white to-lime-600">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-teal-50">
       <Router>
         <Navbar
           isLoggedIn={isLoggedIn}
           firstName={firstName}
           lastName={lastName}
+          profilePicture={profilePicture}
           handleLogout={handleLogout}
         />
 
-        <div className="min-h-screen flexitems-center justify-center ">
+        <div className="min-h-screen flex items-center justify-center">
           <Routes>
             <Route
               path="/"

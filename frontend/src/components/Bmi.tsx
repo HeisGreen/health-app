@@ -13,6 +13,33 @@ const Bmi = () => {
 
   const navigate = useNavigate();
 
+  // Conversion functions
+  const kgToLbs = (kg: number): number => kg * 2.20462;
+  const lbsToKg = (lbs: number): number => lbs / 2.20462;
+  const metersToFeet = (meters: number): number => meters * 3.28084;
+  const feetToMeters = (feet: number): number => feet / 3.28084;
+
+  // Handle unit toggle with conversion
+  const handleUnitToggle = () => {
+    if (weight && height) {
+      const weightNum = parseFloat(weight);
+      const heightNum = parseFloat(height);
+
+      if (!isNaN(weightNum) && !isNaN(heightNum)) {
+        if (useImperial) {
+          // Currently showing Imperial, converting to Metric
+          setWeight(lbsToKg(weightNum).toFixed(2));
+          setHeight(feetToMeters(heightNum).toFixed(2));
+        } else {
+          // Currently showing Metric, converting to Imperial
+          setWeight(kgToLbs(weightNum).toFixed(2));
+          setHeight(metersToFeet(heightNum).toFixed(2));
+        }
+      }
+    }
+    setUseImperial(!useImperial);
+  };
+
   const handleCalculate = async () => {
     if (!weight || !height) {
       alert("Please fill in all fields.");
@@ -23,11 +50,22 @@ const Bmi = () => {
       if (!token) {
         throw new Error("No token found. Please log in.");
       }
+
+      // Convert to metric (kg and meters) before sending to backend
+      let weightInKg = parseFloat(weight);
+      let heightInMeters = parseFloat(height);
+
+      if (useImperial) {
+        // Convert from Imperial to Metric
+        weightInKg = lbsToKg(weightInKg);
+        heightInMeters = feetToMeters(heightInMeters);
+      }
+
       const response = await axiosInstance.post(
         "/bmi/calculate",
         {
-          weight: parseFloat(weight),
-          height: parseFloat(height),
+          weight: weightInKg,
+          height: heightInMeters,
         },
         {
           headers: {
@@ -46,111 +84,183 @@ const Bmi = () => {
   };
 
   return (
-    <div className="flex flex-col w-full md:flex-row">
-      <Sidebar />
-      <div className="flex flex-col items-center space-y-5 w-full h-full justify-center p-4 md:p-0">
-        <motion.h1
-          className="text-3xl md:text-5xl font-extrabold text-transparent italic bg-gradient-to-r from-green-700 to-blue-950 bg-clip-text text-center"
-          initial={{ opacity: 0, y: -50 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-        >
-          Body Mass Index
-        </motion.h1>
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-teal-50">
+      {/* Sidebar - Always fixed on left */}
+      <div className="hidden md:block fixed left-0 top-0 h-screen w-64 z-30">
+        <Sidebar />
+      </div>
 
-        <motion.div
-          initial={{ scale: 0.8, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ duration: 0.8 }}
-        >
-          <img
-            src="BMI.webp"
-            alt="BMI Chart"
-            className="h-auto w-[330px] md:w-[800px] rounded-2xl border-4 border-teal-800 shadow-lg"
-          />
-        </motion.div>
+      {/* Main Content - Offset for sidebar */}
+      <div className="md:ml-64 min-h-screen p-4 md:p-6 lg:p-8">
+        <div className="max-w-5xl mx-auto">
+          {/* Header */}
+          <motion.div
+            className="mb-8"
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            <h1 className="text-3xl md:text-4xl font-bold gradient-text mb-2">
+              Body Mass Index Calculator
+            </h1>
+            <p className="text-gray-600">
+              Calculate your BMI to assess your body weight relative to height
+            </p>
+          </motion.div>
 
-        <motion.p
-          className="text-center px-4 md:px-0"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-        >
-          Body Mass Index (BMI) is a widely used measure to assess body weight
-          relative to height...
-        </motion.p>
-
-        <div className="w-full">
-          <div className="flex items-center justify-center">
-            <motion.div
-              className="w-[330px] md:w-[800px] p-6 flex flex-col justify-center items-center bg-teal-800 rounded-lg border-2 border-white text-white shadow-lg shadow-lime-800/6"
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.8, delay: 0.3 }}
-            >
-              <h1 className="font-extrabold text-xl md:text-3xl text-center">
-                Calculate your Body Mass Index (BMI)
-              </h1>
-              <form
-                className="w-full flex flex-col space-y-5 items-center"
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  handleCalculate();
-                }}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            {/* Left Column - Calculator */}
+            <div className="lg:col-span-2 space-y-6">
+              {/* Calculator Card */}
+              <motion.div
+                className="card-modern"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.2 }}
               >
-                <input
-                  type="number"
-                  name="height"
-                  value={height}
-                  onChange={(e) => setHeight(e.target.value)}
-                  placeholder={`Height (${useImperial ? "m" : "ft"})`}
-                  className="w-full md:w-3/4 p-2 rounded border border-gray-300 text-white"
-                  required
-                />
-
-                <input
-                  type="number"
-                  name="weight"
-                  value={weight}
-                  onChange={(e) => setWeight(e.target.value)}
-                  placeholder={`Weight (${useImperial ? "Kg" : "Lb"})`}
-                  className="w-full md:w-3/4 p-2 rounded border border-gray-300 text-white"
-                  required
-                />
-
-                <motion.button
-                  className="h-[38px] w-44 bg-white text-teal-800 font-bold rounded hover:bg-orange-300 hover:text-white cursor-pointer"
-                  type="submit"
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.9 }}
+                <h2 className="text-xl font-bold text-gray-800 mb-6">
+                  Calculate Your BMI
+                </h2>
+                <form
+                  className="space-y-5"
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    handleCalculate();
+                  }}
                 >
-                  Calculate
-                </motion.button>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-700 mb-2">
+                        Height ({useImperial ? "ft" : "m"})
+                      </label>
+                      <input
+                        type="number"
+                        step="0.01"
+                        name="height"
+                        value={height}
+                        onChange={(e) => setHeight(e.target.value)}
+                        placeholder={`Enter height`}
+                        className="inputClass"
+                        required
+                      />
+                    </div>
 
-                <div className="flex items-center space-x-2">
-                  <input
-                    type="checkbox"
-                    id="terms"
-                    className="mr-2"
-                    checked={useImperial}
-                    onChange={() => setUseImperial(!useImperial)}
-                  />
-                  <label htmlFor="terms" className="text-sm">
-                    I prefer measurements in {useImperial ? "Ft/Lb" : "m/Kg"}
-                  </label>
-                </div>
-                {error && (
-                  <motion.div
-                    className="mt-2 text-center"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ duration: 0.5 }}
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-700 mb-2">
+                        Weight ({useImperial ? "Lb" : "Kg"})
+                      </label>
+                      <input
+                        type="number"
+                        step="0.1"
+                        name="weight"
+                        value={weight}
+                        onChange={(e) => setWeight(e.target.value)}
+                        placeholder={`Enter weight`}
+                        className="inputClass"
+                        required
+                      />
+                    </div>
+                  </div>
+
+                  <div className="flex items-center justify-between p-3 bg-gray-50 rounded-xl">
+                    <span className="text-sm font-semibold text-gray-700">
+                      Units:
+                    </span>
+                    <div className="flex items-center gap-3">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          if (useImperial) handleUnitToggle();
+                        }}
+                        className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                          !useImperial
+                            ? "bg-teal-600 text-white shadow-md"
+                            : "bg-white text-gray-600 hover:bg-gray-100"
+                        }`}
+                      >
+                        Metric (m/kg)
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          if (!useImperial) handleUnitToggle();
+                        }}
+                        className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                          useImperial
+                            ? "bg-teal-600 text-white shadow-md"
+                            : "bg-white text-gray-600 hover:bg-gray-100"
+                        }`}
+                      >
+                        Imperial (ft/lbs)
+                      </button>
+                    </div>
+                  </div>
+
+                  {error && (
+                    <div className="p-3 bg-red-50 border border-red-200 rounded-xl">
+                      <p className="text-red-600 text-sm text-center">{error}</p>
+                    </div>
+                  )}
+
+                  <button
+                    className="btn-primary w-full"
+                    type="submit"
                   >
-                    <p className="text-red-500">{error}</p>
-                  </motion.div>
-                )}
-              </form>
-            </motion.div>
+                    Calculate BMI
+                  </button>
+                </form>
+              </motion.div>
+
+              {/* BMI Chart Image */}
+              <motion.div
+                className="card-modern p-0 overflow-hidden"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.3 }}
+              >
+                <img
+                  src="BMI.webp"
+                  alt="BMI Chart"
+                  className="w-full h-auto rounded-xl"
+                />
+              </motion.div>
+            </div>
+
+            {/* Right Column - Info */}
+            <div className="space-y-6">
+              <motion.div
+                className="card-modern"
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.5, delay: 0.4 }}
+              >
+                <h3 className="text-lg font-bold text-gray-800 mb-4">
+                  About BMI
+                </h3>
+                <p className="text-gray-600 text-sm leading-relaxed mb-4">
+                  Body Mass Index (BMI) is a measure of body fat based on height and weight. 
+                  It helps determine if you're at a healthy weight for your height.
+                </p>
+                <div className="space-y-2 text-sm">
+                  <div className="flex items-start">
+                    <span className="font-semibold text-teal-600 mr-2">•</span>
+                    <span className="text-gray-600">Underweight: BMI &lt; 18.5</span>
+                  </div>
+                  <div className="flex items-start">
+                    <span className="font-semibold text-green-600 mr-2">•</span>
+                    <span className="text-gray-600">Normal: BMI 18.5-24.9</span>
+                  </div>
+                  <div className="flex items-start">
+                    <span className="font-semibold text-yellow-600 mr-2">•</span>
+                    <span className="text-gray-600">Overweight: BMI 25-29.9</span>
+                  </div>
+                  <div className="flex items-start">
+                    <span className="font-semibold text-red-600 mr-2">•</span>
+                    <span className="text-gray-600">Obese: BMI ≥ 30</span>
+                  </div>
+                </div>
+              </motion.div>
+            </div>
           </div>
         </div>
       </div>

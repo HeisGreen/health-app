@@ -1,12 +1,37 @@
 @import "tailwindcss";
 
+@layer base {
+  * {
+    @apply antialiased;
+  }
+  
+  body {
+    @apply bg-gradient-to-br from-slate-50 via-blue-50 to-teal-50;
+  }
+}
+
 @layer components{
     .inputClass{
-        @apply text-center w-full h-12  font-bold border-b-[0.4px] border-b-orange-400 bg-transparent placeholder-white outline-none outline-dashed focus:outline-white/10 italic;
+        @apply w-full h-12 px-4 font-medium border-2 border-teal-200 bg-white/90 backdrop-blur-sm placeholder-gray-400 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all duration-200 text-gray-700;
     }
 
     .inputClasse{
-        @apply text-center w-full h-12  font-bold border-b-[0.4px] border-b-orange-400 bg-transparent placeholder-white outline-none outline-dashed focus:outline-white/10  p-9;
-
+        @apply w-full h-12 px-4 font-medium border-2 border-teal-200 bg-white/90 backdrop-blur-sm placeholder-gray-400 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all duration-200 text-gray-700 p-9;
+    }
+    
+    .card-modern {
+      @apply bg-white/80 backdrop-blur-md rounded-2xl shadow-xl border border-white/20 p-6 transition-all duration-300 hover:shadow-2xl hover:scale-[1.02];
+    }
+    
+    .btn-primary {
+      @apply bg-gradient-to-r from-teal-500 to-teal-600 hover:from-teal-600 hover:to-teal-700 text-white font-semibold px-6 py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105 active:scale-95;
+    }
+    
+    .btn-secondary {
+      @apply bg-white text-teal-600 border-2 border-teal-500 font-semibold px-6 py-3 rounded-xl shadow-md hover:bg-teal-50 transition-all duration-200 transform hover:scale-105 active:scale-95;
+    }
+    
+    .gradient-text {
+      @apply bg-gradient-to-r from-teal-600 via-blue-600 to-teal-600 bg-clip-text text-transparent;
     }
 }
